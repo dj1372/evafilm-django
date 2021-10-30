@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'cnsr.apps.EshopOrderConfig',
     'robots_txt.apps.RobotsTxtConfig',
     'invitor',
-    'dbbackup',
+    # 'dbbackup',
     'slider',
     'videoposition',
 
