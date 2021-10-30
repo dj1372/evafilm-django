@@ -1,0 +1,123 @@
+{% extends 'base(subscription).html' %}
+{% load humanize %}
+{% load static %}
+{% block title %}خرید اشتراک{% endblock %}
+{% block header %}{% endblock %}
+
+{% block content %}
+<body class="buy-body">
+
+    <div class="yc buy-plan-form cart-plan" >
+        <div class="panel-main" style="background:white;">
+            <div class="head yc">
+                                <a href="{% url 'Home' %}" class="right" style="width: 100px"><img src="{% static 'x-logo/logo-bright.png' %}" class="yc logo" title="ایوافیلم" alt="ایوافیلم"></a>
+                <h1 class="right yc-18 yc-bold">تکمیل خرید</h1>
+            </div>
+                            <form class="yc cart" method="post" action="">
+                    <div class="yc title yc-align yc-400 yc-19">{{ selected_plan.title }}</div>
+                    <div class="yc content yc-400 yc-15">
+                        <div class="yc item">
+                            <span class="right yc-limit">{{ selected_item }}</span>
+                            <span class="right yc-limit">قیمت</span>
+                            <span class="left yc-limit">{{ invoice_price|intcomma }} تومان</span>
+                        </div>
+                        <div class="yc item discount-item" style="display: block">
+                            <span class="right yc-limit">درصد تخفیف:</span>
+                            {% if percent and money_with_dis %}
+                            <span class="left yc-limit discount-price">{{ percent|intcomma }}%</span>
+                            {% else %}
+                            <span class="left yc-limit discount-price">0%</span>
+                            {% endif %}
+                        </div>
+                        {% if percent and money_with_dis %}
+                        <div class="yc item discount-item" style="display: block">
+                            <span class="right yc-limit">قیمت با کد تخفیف</span>
+                            <span class="left yc-limit discount-price">{{ money_with_dis|intcomma }} تومان</span>
+                        </div>
+                        {% endif %}
+                        <div class="yc item discount-item" style="display: block">
+                            <span class="right yc-limit">مالیات بر ارزش افزوده</span>
+                            <span class="left yc-limit discount-price">{{ vat_price|intcomma }} تومان</span>
+                        </div>
+                    </div>
+                    <div class="copen yc">
+                        <div class="yc copen-title">
+                            <span class="yc yc-20 yc-medium">کد تخفیف</span>
+                            <samp class="yc yc-12 yc-400">در صورتی کد تخفیف دارید کد خود را وارد کنید و ثبت کد تخفیف را بزنید</samp>
+                        </div>
+                        <div class="form yc">
+                          <form action="" method="POST">
+                              <form action="" method="POST">
+                                {% csrf_token %}
+                                  <div class="input-form-light">
+                                      {{ discount_form.code }}
+                                  </div>
+                                  {% if  discount_form.non_field_errors or discount_form.code.errors or errror %}
+                                  <div class="input-form-light">
+                                      <span class="text-danger" style="background-color: unset;color: darkred;">{{ errror }}</span><br>
+                                      {% for error in discount_form.non_field_errors %}
+                                          <span class="text-danger" style="background-color: unset;color: darkred;">{{ error }}</span><br>
+                                      {% endfor %}
+                                      {% for error in discount_form.code.errors %}
+                                          <span class="text-danger" style="background-color: unset;color: darkred;">{{ error }}</span><br>
+                                      {% endfor %}
+                                  </div>
+                              {% endif %}
+                                <!--  -->
+                                  <button class="yc yc-align yc-15 yc-400 yc-pointer yc-fff yc-5px" style="background:white;border:0;"><span class="yc yc-align yc-15 yc-400 yc-pointer yc-fff yc-5px"  >ثبت کد تخفیف</span></button>
+                              </form>
+                          </form>
+                        </div>
+                        <div class="result-discount yc"></div>
+                    </div>
+                    <div class="yc checkout">
+                      <form action="/subscription/confirm/" method="POST">
+                        {% csrf_token %}
+                        <span class=" yc-14 yc-400">نام درگاه</span>
+                        <div class="dargah">
+
+
+                        <div class="payment dargah1">
+                            <div class="payment-item  yc-align active">
+                              <input type="radio" id="rmellat" name="payway" value="mellat" checked>
+                                <img id="imellat" src="{% static 'images/mellat.png' %}" onclick="payimg('imellat')">
+                                <samp class="yc-14 yc-400 yc">ملت</samp>
+                            </div>
+                        </div>
+                        <div class="payment dargah1" >
+                            <div class="payment-item  yc-align active">
+                              <input type="radio" id="rzarinpal" name="payway" value="zarinpal" onclick="payimg('izarinpal')">
+                                <img id="izarinpal" src="{% static 'images/zarinpal.png' %}" alt="" >
+                                <samp class="yc-14 yc-400 yc">زرین پال</samp>
+                            </div>
+                        </div>
+                        <div class="payment dargah1">
+                            <div class="payment-item  yc-align active">
+                              <input type="radio" id="rmelli" name="payway" value="melli" onclick="payimg('imelli')">
+                                <img id="imelli" src="{% static 'images/melli.png' %}" alt="" >
+                                <samp class="yc-14 yc-400 yc">ملی</samp>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="yc pay-out yc-15">
+                            <samp class="right yc-medium">مبلغ قابل پرداخت:</samp>
+                            {% if money_with_dis == 0 %}
+                                <samp class="left yc-medium pay-price">{{ invoice_price|intcomma }} تومان</samp>
+                            {% else %}
+                                <samp class="left yc-medium pay-price">{{ money_with_dis|intcomma }} تومان</samp>
+                            {% endif %}
+                            <input type="hidden" name="plan_name" value="{{ plan_name }}">
+                            <input type="hidden" name="switch_status" value="{{ switch_status }}">
+                            <input type="hidden" name="code" value="{{ code }}">
+
+                            <input type="submit"  value="پرداخت آنلاین" class="yc yc-pointer" />
+                        </div>
+
+                    </div>
+
+
+                </form>
+                    </div>
+    </div>
+
+{% endblock %}

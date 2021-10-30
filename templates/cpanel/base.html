@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block keywords %}{% endblock %}
+    <title>{% block title %} Home {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'cpanel-style/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'cpanel-style/css/bootstrap-grid.min.css' %}">
+    <link rel="stylesheet" href="{% static 'cpanel-style/css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'cpanel-style/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'cpanel-style/css/owl.theme.default.min.css' %}">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+    <script src="{% static 'cpanel-style/js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'cpanel-style/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'cpanel-style/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'cpanel-style/js/main.js' %}"></script>
+</head>
+<body>
+    {% include 'cpanel/includes/header.html' %}
+
+    <div class="container pt-4">
+        <ol class="breadcrumb badge-dark mb-4">
+            {% block breadcrumbitm %}
+            {% endblock %}
+        </ol>
+    </div>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

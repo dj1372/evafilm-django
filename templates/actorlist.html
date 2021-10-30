@@ -1,0 +1,29 @@
+{% extends 'base(original).html' %}
+{% load static %}
+{% block title %}دسته بندی{% endblock %}
+{% block custom_css %}
+
+
+
+
+{% endblock %}
+{% block content %}    <div class="yc main-site">
+<section class="yc site-categories">
+	    <ul class="main ">
+            {% for item in actors %}
+
+        <li class="item right">
+            <a href="{% url 'ViewActor' item.id item.name %}" title="{{item.name}}">
+              <div class="actor-pic">
+                <img src="{% url 'Home' %}media/{{item.thumb_image}}" alt="{{item.name}}">
+              </div>
+
+            <samp class="yc-fff yc-15 yc-400 yc yc-limit yc-align">{{item.name}}</samp>
+            </a>
+          </li>
+        {% endfor %}
+            </ul>
+	</section>
+
+</div>
+{% endblock %}

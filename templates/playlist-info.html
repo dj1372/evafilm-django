@@ -1,0 +1,235 @@
+{% extends 'base(original).html' %}
+{% load static %}
+{% load poll_extras %}
+{% block title %}{{ playlist.name_fa }}{% endblock %}
+{% block custom_css %}<link rel="stylesheet" href="{% static 'css/chosen.css' %}">{% endblock %}
+
+{% block content %}
+<div class="info">
+    <div class="yc main-site" >
+        <section class="yc">
+            <article class="yc">
+                <div class="yc main-header">
+                    <div class="yc single-header"  style="background-image: linear-gradient(rgba(18, 18, 18, 0) 10vw, rgb(18, 18, 18) 46.875vw), linear-gradient(to left, rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0) 50%),url({% url 'Home' %}media/{{ playlist.image_1920x1080}})">
+                        <div class="yc yc-overflow yc-relative">
+                            <div class="d-slide-bg">
+                                <div class="m-slide-bg" style="background-image: linear-gradient(rgba(18, 18, 18, 0) 10vw, rgb(18, 18, 18) 120vw), url({% url 'Home' %}media/{{playlist.image_600x810}})">
+                                </div>
+                                <div class="single-info right">
+                                    <div class="single-center">
+                                        <a {% if playlist.Episodes.first %} href="{% url 'Home' %}{{ playlist.Episodes.first.page_url }}" {% endif %}>
+                                            <img  src="{% url 'Home' %}media/{{ playlist.thumb_image }}" />
+                                        </a>
+                                        <h1 class="yc-fff yc-medium yc-25">{{ playlist.name_en }}</h1>
+                                        <h1 class="yc-fff yc-medium yc-25">{{ playlist.name_fa }}</h1>
+                                        <ul class="yc post-stick">
+                                            <li class="right yc-fff yc-15 yc-400 year">{{ playlist.year }}</li>
+                                            <li class="right yc-fff yc-15 yc-400 heart"><i class="fa fa-imdb"></i>{{ playlist.imdb_score }}/10</li>
+                                            {% if playlist.users_score != 0 %}
+                                                <li class="right yc-fff yc-15 yc-400 heart"><i class="fa fa-thumbs-up"></i>{{ playlist.imdb_score }}/10</li>
+                                            {% endif %}
+                                        </ul>
+                                        <div class="post-content yc yc-16 yc-fff">
+                                            <p>{{ playlist.summary }}</p>
+                                        </div>
+                                        <div class="post-btns yc">
+                                            <ul class="yc post-stick">
+                                            <li  class="right yc-fff yc-15 yc-400 year">
+                                            {% if playlist.type == 2 %}
+                                                {% if playlist.Episodes.first %}
+                                                    <a href="{% url 'Home' %}{{ playlist.Episodes.first.page_url }}" target="_blank" class="right demo" title="نمایش سریال" > نمایش قسمت اول </a>
+                                                {% else %}
+                                                    <a href="" target="_blank" class="right demo" title="پخش به بزودی">پخش بزودی</a>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if playlist.Episodes.first %}
+                                                    <a href="{% url 'Home' %}{{ playlist.Episodes.first.page_url }}" target="_blank" class="right demo" title="نمایش فیلم" > نمایش فیلم </a>
+                                                {% else %}
+                                                    <a href="" target="_blank" class="right demo" title="پخش به بزودی">پخش بزودی</a>
+                                                {% endif %}
+                                            {% endif %}
+                                            </ul>
+                                            <span class="right yc-fff yc-center fav-plus rate-dislike" data-disabled="true" data-post="120" id="dislike-btn" onclick="likeHandler('{{ user.Profile.api_token }}', {{ playlist.id }}, 0)" title="نپسندیدن فیلم">{% if is_this_playlist_liked == 0 %} <i class="fa fa-thumbs-up"> {% else %} <i class="fa fa-thumbs-o-up"> {% endif %}</i></span>
+                                            <span class="right yc-fff yc-center fav-plus rate-like" data-disabled="false" data-post="120" id="like-btn" onclick="likeHandler('{{ user.Profile.api_token }}', {{ playlist.id }}, 1)" title="پسندیدن فیلم"> {% if is_this_playlist_liked == 1 %} <i class="fa fa-thumbs-up"> {% else %} <i class="fa fa-thumbs-o-up">{% endif %}</i></span>
+                                            <span class="right yc-fff yc-center fav-plus add-to-bookmark{% if is_this_playlist_bookmarked == 1 %} bookmarked{% endif %}" data-disabled="false" data-post="303" id="bookmark-btn" onclick="bookmarkHandler('{{ user.Profile.api_token }}', {{ playlist.id }}, 1)" {% if is_this_playlist_bookmarked == 1 %}  title="حذف از لیست علاقه مندی"><i class="fa fa-check"> {% else %} title="افزودن به لیست علاقه مندی"><i class="fa fa-plus"> {% endif %} </i></span>
+                                        <!--    <span class="right yc-fff yc-center fav-plus add-to-bookmark" data-disabled="false" data-post="303" </i></span>-->
+                                        </div>
+                                        <ul class="yc post-metas">
+                                            <li class="yc">
+                                                <span>محصول کشور:  </span>
+                                                {{ playlist.country.all|join:' و ' }}
+                                            </li>
+                                            <li class="yc">
+                                                <span>کارگردان: </span>
+                                                {% for item in playlist.director.all %}
+                                                    <a href="{% url 'ViewDirector' item.pk item.name %}" rel="tag">{{ item.name }}</a>
+                                                {% endfor %}
+                                            </li>
+                                            <li class="yc">
+                                                <span>دسته بندی: </span>
+                                                {% for category in playlist.category.all %}
+                                                <a href="{% url 'ByCategory' category.page_url %}" rel="category tag">  {{ category.name_fa }}</a> -
+                                                {% endfor %}
+                                            </li>
+                                            <li class="yc">
+                                                <span>نوع:</span>
+                                                {% if playlist.type == 1 %}
+                                                فیلم سینمایی
+                                                {% else %}
+                                                سریال
+                                                {% endif %}
+                                            </li>
+                                            <li class="yc yc-15 yc-400 age">
+                                                <span>{{ playlist.tv_pg }}</span> <samp> مناسب برای {{ playlist.tv_pg }} سال به بالا </samp>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if playlist.type == 2 %}
+                <div class="yc serie-episodes">
+                    <div class="single-main">
+                        <div class="serie-select yc-relative" style="z-index: 1;"></div>
+                        {% for season in playlist.Seasons.all %}
+                            <ul class="serie-videos yc">
+                                <select data-pid="120" data-disabled="false">
+                                    <option value="{{ season.id }}">فصل {{ season.name }}</option>
+                                </select>
+                                <br><br/>
+                                {% for episode in season.Episodes.all|sort_episodes %}
+                                    <li class="right yc-relative">
+                                        <a target="_blank" href="{% url 'Home' %}{{ episode.page_url }}" {% if episode.title %} title="{{ episode.title }}" {% endif %}>
+                                            <img src="{% static 'images/episode_play.png' %}" class="yc" alt="فصل {{ season.name }} قسمت {{ episode.index }}">
+                                            <div class="yc videoimg-hvr yc-center">
+                                                <div class="icon yc-center">
+                                                    <i class="fa fa-play"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="serie-title yc">
+                                            <h2 class="right yc-fff yc-14 yc-limit yc-medium">    قسمت {{ episode.index }}{% if episode.title is not None %}: {{ episode.title }}{% endif %}</h2>
+                                        </div>
+                                        <div class="serie-content yc">
+                                            <p>{{ episode.summary }}</p>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                                <br/>
+                            </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="yc actors-slide">
+                    <div class="single-main yc-relative">
+                        <h3 class="yc-22 yc-medium yc-fff">بازیگران</h3>
+                        <ul class="yc owl-carousel actors-slider yc-sliders">
+                            {% for item in playlist.actor.all %}
+                                <li class="item right">
+                                    <a href="{% url 'ViewActor' item.pk item.name %}" title="{{ item.name }}">
+                                        <img src="{% url 'Home' %}media/{{ item.thumb_image }}" alt="{{ item.name }}">
+                                        <samp class="yc-fff yc-15 yc-400 yc yc-limit yc-align">{{ item.name }}</samp>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="yc actors-slide">
+                    <div class="single-main yc-relative">
+                        <h3 class="yc-22 yc-medium yc-fff">کارگردان</h3>
+                        <ul class="yc owl-carousel actors-slider yc-sliders">
+                            {% for item in playlist.director.all %}
+                                <li class="item right">
+                                    <a href="{% url 'ViewActor' item.pk item.name %}" title="{{ item.name }}">
+                                        <img src="{% url 'Home' %}media/{{ item.thumb_image }}" alt="{{ item.name }}">
+                                        <samp class="yc-fff yc-15 yc-400 yc yc-limit yc-align">{{ item.name }}</samp>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </article>
+        </section>
+        <br/>
+
+        <div class="yc movie-slides">
+            <div class="main">
+                {% if promo_playlist.count > 0 %}
+                    <div class="right section-info">
+                        <h3 class="yc-22 yc-medium yc-fff">همچنین تماشا کنید</h3>
+                    </div>
+                    <section class="yc owl-carousel movies-slider yc-sliders">
+                        {% for playlist in promo_playlist.all %}
+                            <article class="right item" data-disabled="false" data-post="157">
+                                <a href="{% url 'Home' %}{{ playlist.page_url }}">
+                                    <div class="yc yc-relative" rel="bookmark" title="{{ playlist.name_fa}}">
+                                        <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+                                        <div class="hvr-post">
+                                            <ul class="yc yc-absolute">
+                                                <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }} </li>
+                                                <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>
+                                                <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-microphone"></i>{{ playlist.category.all|join:' - ' }}</li>
+                                                <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-file-text-o"></i> زیرنویس فارسی</li>
+                                            </ul>
+                                        </div>
+                                        <h4 class="yc-fff yc yc-15 yc-medium yc-limit">{{ playlist.name_fa|truncatechars:23 }}</h4>
+                                    </div>
+                                </a>
+                            </article>
+                        {% endfor %}
+                    </section>
+                {% endif %}
+            </div>
+        </div>
+        <div class="comments-list yc">
+            <div class="comments">
+                <span class="yc yc-18 yc-fff yc-medium title">نظرات کاربران</span>
+                <div class="comments-ul yc">
+                    {% if user.is_authenticated %}
+                        <div id="comment-status" class="cm-status"></div>
+                        <form class="yc form yc_commentform" method="post" action="http://localhost/mytest/series/%d8%a2%d9%82%d8%a7%d8%b2%d8%a7%d8%af%d9%87/">
+                            <div class="right avatar yc-fff">
+                                <i class="fa fa-user-circle"></i>
+                            </div>
+                            <input id="comment-input" onclick="event.stopPropagation(); $(this).addClass('active'); $('.comment-checkbox').fadeIn();" type="text" class="right input" placeholder="نظرتان درباره این فیلم چیست؟" />
+                            <div class="">
+                            </div>
+                            <button class="right submit" style="background: #99c14d url({% static 'images/send.png' %}) no-repeat center/21px;" type="button" onclick="commentHandler('{{ user.Profile.api_token }}', {{ playlist.id }})"></button>
+                        </form>
+                    {% else %}
+                        <span class="yc not-logged yc-fff yc-medium">برای ثبت نظر وارد حساب کاربری خود شوید ! <a href="{% url 'Login' %}">ورود و ثبت نام</a> </span>
+                    {% endif %}
+                    <ul class="yc">
+                        {% for i in comments.all %}
+                            <li class="comment even thread-even depth-1" class="yc" id="comment-191">
+                                <div class="comment_item" id="div-comment-191" data-commentid="191">
+                                    <div class="right avatar yc-fff">
+                                        <i class="fa fa-user-circle"></i>
+                                    </div>
+                                    <div class="comment-content right">
+                                        <div class="title yc yc-13 yc-limit">
+                                            <span class="right name">{{ i.user.Profile.nick_name }}</span>
+                                            <span class="right time yc-10">{{ i.date_shamsi }}</span>
+                                        </div>
+                                        <div class="comment-p yc yc-14 yc-fff">
+                                            <p>{{ i.comment }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="yc more"><div class="more-center"><div class="more-comments">بیشتر</div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

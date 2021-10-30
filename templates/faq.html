@@ -1,0 +1,42 @@
+{% extends 'base(subscription).html' %}
+{% load static %}
+{% block title %}سوالات متداول{% endblock %}
+{% block custom_css %}
+
+
+
+
+{% endblock %}
+{% block content %}    <div class="yc pages">
+    <div class="main-pages">
+        <h1 class="yc-400 yc-align yc yc-23">سوالات متداول</h1>
+        <div class="yc content">
+            <ul class="yc faq">
+                                        <li class="yc">
+                            <div class="yc title yc-pointer">
+                                <span class="right">1. نحوه ثبت نام در سایت چگونه است؟</span>
+                                <samp class="left"><i class="fa fa-angle-left"></i></samp>
+                            </div>
+                            <div class="p-content yc">
+                                براحتی پس از کلیک بر روی ورود/ثبت نام مشخصات خود را پر میکنید و ثبت نام خود را انجام میدهید !                            </div>
+                        </li>
+                                        <li class="yc">
+                            <div class="yc title yc-pointer">
+                                <span class="right">2. چرا باید برای تماشای فیلم ‌ها اشتراک تهیه کنم؟</span>
+                                <samp class="left"><i class="fa fa-angle-left"></i></samp>
+                            </div>
+                            <div class="p-content yc">
+                                برای آنکه حقوق صاحبان اثر حفظ گردد و شما بصورت قانونی فیلم را تهیه و استفاده نمایید !                            </div>
+                        </li>
+                            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    jQuery(document).ready(function() {
+        $('body').addClass('buy-body');
+    });
+</script>
+
+{% endblock %}

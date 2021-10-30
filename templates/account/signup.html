@@ -1,0 +1,35 @@
+{% extends 'base(login).html' %}
+{% load static %}
+
+{% block title %}ورود/ثبت نام{% endblock %}
+
+{% block content %}
+<br>
+<br>
+<div class="yc user-panel-form">
+    <div class="panel-main">
+        <div class="head yc">
+            <a href="{% url 'Home' %}"><img src="{% static 'x-logo/logo.png' %}" title="ایوافیلم" alt="ایوافیلم" class="yc logo"></a>
+            <a href="{% url 'Login' %}" class="left yc-fff switch-btn" title="ثبت نام"> ورود</a>
+        </div>
+        <div class="form yc">
+            <h1 class="yc yc-fff yc-20 yc-bold">ثبت نام با شماره تلفن همراه</h1>
+            <form class="yc" method="post" action="">
+              {% csrf_token %}
+              <label for="txtNumber">
+                <h2 class="yc yc-13 yc-400">لطفا شماره تلفن خود را وارد کنید</h2>
+                <input style="direction:LTR" type="tel" minlength="11" maxlength="11" name="mobile" id="txtNumber" value="{{ phone }}" placeholder="09**********" required class="input" oninvalid="this.setCustomValidity('شماره همراه شما صحیح نمی باشد')" oninput="this.setCustomValidity('')"/>
+                <input style="display:none;" class="d-none" value="{{ state }}" type="text" name="state" id="state">
+                {% if alert is not None %}
+                    <div class="panel-alert">
+                        {{ alert }}
+                    </div>
+                {% endif %}
+                <button class="submit">ثبت نام</button>
+                <br />
+              </label>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

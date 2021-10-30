@@ -1,0 +1,43 @@
+{% load static %}
+<div class='modal-win'>
+    <div id="search-field-con">
+        <i class="fa fa-search" id="search-btn" aria-hidden="true"></i>
+        <input id="search-field" onkeyup="search(this.value);" type="text" placeholder="جستجو فیلم و سریال..."/>
+        <a class="btn btn-link" id="search-close-btn" aria-hidden="true" onclick="$('.modal-win').fadeOut();">بستن</a>
+    </div>
+    <div class="container">
+        <div class='result'>
+
+        </div>
+    </div>
+    <div class="search-navigation-btn">
+        <button class="btn btn-primary" id="search-navigation-next">بعدی</button>
+        <button class="btn btn-primary" id="search-navigation-prev">قبلی</button>
+    </div>
+</div>
+<header>
+    <div class="border border-success" style="height: 2px"></div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'Home' %}"><img src="{% static 'images/logo.png' %}"> Admin</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+          </ul>
+            {% if user.is_authenticated %}
+                <ul class="nav menu_nav mr-auto  flex-left">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        ><img src="{% static 'images/profile.png' %}" class="profile"> {{ user.username }}</a>
+                        <div class="dropdown-menu dropdown-menu-left text-right bg-dark" aria-labelledby="userMenu">
+                            <a class="dropdown-item badge-dark" href="{% url 'Logout' %}">خروج</a>
+                        </div>
+                    </li>
+                </ul>
+            {% endif %}
+        </div>
+      </div>
+    </nav>
+</header>

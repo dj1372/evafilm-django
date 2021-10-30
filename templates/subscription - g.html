@@ -1,0 +1,55 @@
+{% extends 'base(subscription).html' %}
+{% load humanize %}
+{% load static %}
+{% block title %}خرید اشتراک{% endblock %}
+{% block header %}{% endblock %}
+
+{% block content %}
+<div class="yc buy-plan-form">
+    <div class="panel-main">
+        <div class="head yc">
+             <a href="{% url 'Home' %}" class="right" style="width: 100px"><img src="{% static 'x-logo/logo-bright.png' %}" class="yc logo" title="ایوافیلم" alt="ایوافیلم"></a>
+             <h1 class="right yc-18 yc-bold">عضویت خاص ایوافیلم</h1>
+        </div>
+        <div class="copen yc">
+            <div class="yc copen-title">
+                <span class="yc yc-20 yc-medium">کد هدیه</span>
+                <samp class="yc yc-12 yc-400">در صورتی کد هدیه دارید آن را وارد کنید و دکمه ثبت کد هدیه را بزنید</samp>
+            </div>
+            <div class="form yc">
+                  <form action="" method="POST">
+
+                      <div class="input-form-light" style="margin-bottom:20px;">
+                        {% csrf_token %}
+                        {{ form.code }}
+                      </div>
+                      {% if  discount_form.non_field_errors or discount_form.code.errors %}
+                              <div class="input-form-light">
+                                  {% for error in discount_form.non_field_errors %}
+                                      <span class="text-danger">{{ error }}</span><br>
+                                  {% endfor %}
+                                  {% for error in discount_form.code.errors %}
+                                      <span class="text-danger">{{ error }}</span><br>
+                                  {% endfor %}
+                              </div>
+                          {% endif %}
+                      <button class="yc yc-pointe" style="height:30px;color:white;background:#1993ff;">ثبت کد هدیه</button>
+                      <div class="" style="color:green;margin-top:20px;background:none;">
+                      {% if  status == 1 %}
+                      <p>عملیات با موفقیت انجام شد</p><br>
+                      {% elif  status == 2 %}
+                      <p style="color:red;">عملیات با شکست مواجه شد</p><br>
+                      {% elif  status == 3 %}
+                      <p style="color:blue;">لطفا فرم را پر کرده بر روی دکمه ثبت کد بزنید</p><br>
+                      {% endif %}
+                      </div>
+                  </form>
+            </div>
+            <div class="result-discount yc"></div>
+        </div>
+        <div class="plans-info yc">
+                <p class="yc"> شما با وارد کردن کد های هدیه ایوا فیلم می توانید برای مدت محدودی به برخی از دسته های فیلم و سریال دسترسی رایگان داشته باشید. </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

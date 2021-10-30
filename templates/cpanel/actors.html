@@ -1,0 +1,42 @@
+{% extends 'cpanel/base.html' %}
+
+{% block title %}Evafilm{% endblock %}
+
+{% block breadcrumbitm %}
+    <li class="breadcrumb-item"><a href="{% url 'admin_playlists' %} ">لیست فیلم و سریال ها</a></li>
+    <li class="breadcrumb-item active">لیست بازیگرها</li>
+{% endblock %}
+
+{% block content %}
+    <div class="container pt-4">
+    <div>
+        <h3 class="text-light float-right">لیست بازیگرها</h3>
+        <a class="btn btn-success float-left mb-2" href="{% url 'admin_new_actor' %}">بازیگر جدید</a>
+    </div>
+    <div class="table-responsive">
+    <table class="table table-striped" dir="rtl">
+        <thead class="thead-dark">
+            <tr class="text-light">
+                <th>نام بازیگر</th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody class="text-light">
+
+            {% for actor in actors %}
+            <tr>
+                <td class="align-middle">
+                    {{ actor.name }}
+                </td>
+                <td>
+                    <a class="btn btn-secondary text-light" href="{% url 'admin_edit_actor' actor.pk %}">ویرایش</a>
+{#                    <a class="btn btn-danger text-light" href="{% url 'admin_delete_actor' actor.pk %}">حذف</a>#}
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    </div>
+{% endblock %}

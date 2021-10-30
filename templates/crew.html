@@ -1,0 +1,69 @@
+{% extends 'base(original).html' %}
+{% load static %}
+{% block keywords %}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<br><br><br><br>
+    <div class="yc single-actor">
+    <div class="main actor-info">
+    <div class="right actor-pic"><img src="{% url 'Home' %}media/{{ crew.thumb_image }}" alt="{{ title }}" /></div>
+    <div class="right content">
+        <h2 class="yc yc-fff yc-24 yc-medium title">{{ title }}</h2>
+        <div class="yc actor-info-text">
+        <p>{{ crew.summary }}</p>
+        </div>
+    </div>
+</div>
+    <div class="yc movie-slides">
+        <div class="main yc-relative">
+            <section class="yc owl-carousel movies-slider yc-sliders">
+                {% for i in playlist %}
+                <article class="right item" data-disabled="false" data-post="157">
+                    <a href="{% url 'Home' %}{{ i.page_url }}">
+                        <div class="yc yc-relative" rel="bookmark" title="{{ i.name_fa }}">
+                            <img src="{% url 'Home' %}media/{{ i.thumb_image }}" alt="{{ i.name_fa }}" />
+                            <div class="hvr-post">
+                                <ul class="yc yc-absolute">
+                                <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ i.get_type_display }} - {{ i.country.first }} - {{ i.year }}</li>
+                                <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> i.imdb_score</li>
+                                <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-file-text-o"></i> زیرنویس فارسی</li>                                </ul>
+                            </div>
+                            <h4 class="yc-fff yc yc-15 yc-medium yc-limit">{{ i.name_fa|truncatechars:23 }}</h4>
+                            <h4 class="yc-fff yc yc-15 yc-medium yc-limit">{{ i.name_en|truncatechars:20 }}</h4>
+                        </div>
+                    </a>
+                </article>
+                {% endfor %}
+            </section>
+        </div>
+    </div>
+</div>
+<div class="list-pagination" dir="rtl">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% if playlist.paginator.num_pages > 1 %}
+                {% if playlist.has_previous %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ page_obj.previous_page_number }}">قبلی</a></li>
+                {% endif %}
+
+                {% for i in playlist.paginator.page_range  %}
+                    {% if i == playlist.number  %}
+                        <li class="page-item disabled"><a class="page-link farsi"
+                                                          href="?page={{ i }}">{{ i }}</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link farsi"
+                                                 href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {%  endfor %}
+
+                {% if playlist.has_next %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ playlist.next_page_number }}">بعدی</a></li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

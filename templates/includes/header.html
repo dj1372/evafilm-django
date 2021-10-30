@@ -1,0 +1,75 @@
+{% load static %}
+<header class="yc main-head">
+    <div class="main">
+          <div class="right right-head" style="position: fixed;">
+              <span class="right yc-fff yc-22 yc-pointer" id="menu-open"><i class="fa fa-list"></i></span>
+              <div class="right logo">
+                <a href="{% url 'Home' %}"><img src="{% static 'x-logo/logo.png' %}" title="ایوافیلم" alt="ایوافیلم"></a>
+              </div>
+          </div>
+          {% if user.is_authenticated %}
+              <div class="left left-head">
+                    <span class="yc-pointer yc-fff right" id="search-btn"><i class="fa fa-search"></i></span>
+                    <a href="{% url 'Subscription' %}" class="right yc-fff yc-15 yc-400 head-panel">خرید اشتراک</a>
+                    <div class="right logged">
+                        <div class="user-panel-top yc-relative">
+                            <i class="fa fa-user-circle yc-fff top-menu-panel-icon yc-pointer"></i>
+                            <ul class="yc-absolute panel-menu">
+                                <div class="menu-info yc">
+                                    <a href="{% url 'Profile' %}" class="yc">
+                                        <i class="fa fa-user-circle right"></i>
+                                        <span class="yc-limit yc-000">{{ user.first_name }} {{ user.last_name }}</span>
+                                    </a>
+                                </div>
+                                <li class="yc"><a href="{% url 'Bookmark'%}" class="yc"><i class="fa fa-plus right"></i> <span class="right yc-limit">لیست من</span></a></li>
+                                <li class="yc"><a href="{% url 'Like'%}" class="yc"><i class="fa fa-thumbs-o-up right"></i> <span class="right yc-limit">علاقه مندی ها</span></a></li>
+                                <li class="yc"><a href="{% url 'Subscription' %}" class="yc"><i class="fa fa-star right"></i> <span class="right yc-limit">خرید اشتراک</span></a></li>
+                                <li class="yc"><a href="{% url 'Profile' %}" class="yc"><i class="fa fa-user right"></i> <span class="right yc-limit">حساب کاربری</span></a></li>
+                                <li class="yc"><a href="{% url 'gift' 0 %}" class="yc"><i class="fa fa-user right"></i> <span class="right yc-limit">کارت هدیه</span></a></li>
+                                <li class="yc"><a href="{% url 'Contact' %}" class="yc"><i class="fa fa-user right"></i> <span class="right yc-limit">تماس با ما</span></a></li>
+                                <li class="yc"><a href="{% url 'FAQ' %}" class="yc"><i class="fa fa-info-circle right"></i> <span class="right yc-limit">راهنما و سوالات متداول</span></a></li>
+                                <li class="yc"><a href="{% url 'Logout' %}" class="yc"><i class="fa fa-power-off right"></i> <span class="right yc-limit">خروج از حساب کاربری</span></a></li>
+                                {% if user_subscription_valid_days < 0 %}
+                                    <div class="panel-menu-foot yc not-active">
+                                        <span class="yc yc-align yc-medium">شما اشتراک فعالی ندارید !</span>
+                                        <samp class="yc yc-align yc-medium">جهت تماشای تمامی فیلم و سریال ها می توانید اشتراک تهیه نمایید</samp>
+                                    </div>
+                                {% else %}
+                                    <div class="panel-menu-foot yc not-active" style="background:green;">
+                                        <span class="yc yc-align yc-medium">اشتراک شما فعال است</span>
+                                    </div>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+              </div>
+          {% else %}
+              <div class="left left-head">
+                  <span class="yc-pointer yc-fff right" id="search-btn"><i class="fa fa-search"></i></span>
+                  <a href="{% url 'Subscription' %}" class="right yc-fff yc-15 yc-400 head-panel">خرید اشتراک</a>
+                  <a href="{% url 'Login' %}" class="right yc-fff yc-15 yc-400 head-panel login-register">ورود / ثبت نام</a>
+                  <a href="{% url 'Login' %}" class="right yc-fff head-panel m-login-register"><i class="fa fa-user-plus"></i></a>
+              </div>
+          {% endif %}
+        <div class="right center-head" style="margin-right: 125px">
+              <ul class="main-menu right">
+                  <li class="right menu-item">
+                      <a href="{% url 'Home'%}">خانه</a>
+                  </li>
+                  <li class="right menu-item">
+                      <a href="{% url 'Movies'%}">فیلم ها</a>
+                  </li>
+                  <li class="right menu-item">
+                      <a href="{% url 'Series'%}">سریال ها</a>
+                  </li>
+                  <li class="right menu-item">
+                      <a href="{% url 'Categories'%}">دسته بندی</a>
+                  </li>
+                  <li class="right menu-item">
+                      <a href="https://evafilm.stream/blog">بلاگ</a>
+                  </li>
+              </ul>
+        </div>
+    </div>
+</header>
+

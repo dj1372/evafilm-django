@@ -1,0 +1,103 @@
+{% extends 'base(subscription).html' %}
+{% load humanize %}
+{% load static %}
+
+{% block title %}خرید اشتراک{% endblock %}
+{% block header %}{% endblock %}
+
+
+{% block content %}
+
+<div class="yc buy-plan-form">
+    <div class="panel-main">
+        <div class="head yc">
+             <a href="{% url 'Home' %}" class="right" style="width: 100px"><img src="{% static 'x-logo/logo-bright.png' %}" class="yc logo" title="ایوافیلم" alt="ایوافیلم"></a>
+             <h1 class="right yc-18 yc-bold">خرید اشتراک ایوا فیلم</h1>
+             <a href="{% url 'Home' %}" class="yc buy-banner"><img src="{% static 'x-logo/vip_banner.png' %}" class="yc" alt="vip"></a>
+        </div>
+            <div class="yc plans">
+                <ul class="yc">
+                    {% if err %}
+                    <div class="p-0 card-description">
+                        <div class="row justify-content-center my-2 mx-1">
+                            <span class="text-danger text-center text-justify mx-1">{{ err }}</span><br>
+                            <div class="mx-auto my-1" style="margin-top:30px;text-align: center;">
+                                <a href="{% url 'Subscription' %}" style="border: 1px solid dodgerblue;border-radius: 10px;background: deepskyblue;color: white;padding: 10px;" class="text-center">بازگشت</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% for plan in subscription_plans %}
+                        <li class="yc">
+                            <form class="yc cart" id="{{ plan.name }}" style="height:100px" method="post" action="">
+                                <div class="right plan-item-single yc-align">
+                                    <h2 class="yc yc-18 yc-medium">{{ plan.title }}</h2>
+                                </div>
+                                <div class="right plan-item-single yc-align">
+                                      <samp class="yc yc-18 yc-medium">{{ plan.price|intcomma }} تومان</samp>
+                                </div>
+                                <div class="right plan-item-single yc-align">
+                                      <samp class="yc yc-18 yc-medium">               </samp>
+                                      <input class="form-control" value="{{ plan.name }}" type="text" style="width: 100%; display: none" name="plan_name" id="plan_name">
+                                </div>
+                                <div class="right plan-item-single yc-align">
+                                  {% csrf_token %}
+                                    <button class="btn-blue" onclick="document.getElementById('{{ plan.name }}').submit()">انتخاب</button>
+                                </div>
+                            </form>
+                        </li>
+                    {% endfor %}
+                      <!--   <span class="left yc-limit" style="background:white;">به مبلغ فوق 9% مالیات برارزش افزوده اضافه میشود</span>
+
+                                               <li class="yc">
+                            <div class="right plan-item-single yc-align">
+                                <h2 class="yc yc-18 yc-medium">سه ماهه</h2>
+                            </div>
+                            <div class="right plan-item-single yc-align">
+                                <span class="yc yc-18 yc-400"><del>90,000</del> تومان</span>
+                            </div>
+                            <div class="right plan-item-single yc-align">
+                                <samp class="yc yc-18 yc-medium">75,000 تومان</samp>
+                            </div>
+                            <div class="right plan-item-single yc-align">
+                                <a href="user-login.html" class="yc-15 yc-400">انتخاب</a>
+                            </div>
+                        </li>-->
+                </ul>
+           </div>
+           <div class="plans-info yc">
+                <p class="yc"><strong>با خرید اشتراک ایوافیلم به امکانات زیر دسترسی خواهید داشت:</strong></p>
+                <ul class="unorder-list-dots">
+                    <li dir="rtl" style="text-align: right;">- تماشای نامحدود هزاران ساعت فیلم و سریال و انیمیشن جذاب در طول مدت اشتراک خریداری شده</li>
+                    <li dir="rtl" style="text-align: right;">- حجم اینترنت نیم بها در زمان تماشای فیلم (حتما باید vpn شما خاموش باشد)</li>
+                </ul>
+           </div>
+
+                  <!--           <div class="yc blog yc-000">
+                <div class="yc title">
+                    <i class="fa fa-warning right"></i>
+                    <h3 class="right yc-16 yc-bold">کارت هدیه نماوا</h3>
+                </div>
+                <div class="yc content">
+                  <form action="" method="POST">
+                      <div class="input-form-light">
+                          <input type="text" id="txtCode" placeholder="کد کارت هدیه">
+                      </div>
+                      <button class="btn-disabled">ثبت کد</button>
+                      <ul class="unorder-list-dots">
+                          <li>درصورتیکه دارای کد خریداری شده از ایوافیلم هستید در این قسمت وارد کنید</li>
+                          <li>درصورتیکه دارای کد تخفیف هستید ابتدا اشتراک مورد نظر خود را انتخاب کرده سپس در قسمت کد تخفیف, کد خود را وارد کنید</li>
+                      </ul>
+                  </form>
+                </div>
+            </div>
+                                                <div class="yc contact-info">
+                <h3 class="yc yc-align yc-fff yc-20 yc-medium">""</h3>
+                <div class="contacts yc yc-align yc-fff">
+                    <span class="right">تلفن تماس : ۰۰۰۱۱۱-۰۲۱</span>
+                     <span class="right">ایمیل : support@evafilm.stream</span>                    </div>
+            </div>
+                </div>-->
+</div>
+
+{% endblock %}

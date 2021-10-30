@@ -1,0 +1,44 @@
+{% extends 'base(subscription).html' %}
+{% load humanize %}
+{% load static %}
+
+{% block title %}خرید اشتراک{% endblock %}
+{% block header %}{% endblock %}
+
+
+{% block content %}
+
+<body class="buy-body">
+
+    <div class="yc buy-plan-form cart-plan" >
+        <div class="panel-main" style="background:white;">
+            <div class="head yc">
+                <a href="{% url 'Home' %}" class="right" style="width: 100px"><img src="{% static 'wp-content/themes/namabin/assets/img/logo-bright.png' %}" class="yc logo" title="ایوافیلم" alt="ایوافیلم"></a>
+                <h1 class="right yc-18 yc-bold">تکمیل خرید</h1>
+            </div>
+            <form class="yc cart" method="post" action="">
+                <div class="yc content yc-400 yc-15">
+                    {% if msg == '1' %}
+                        <div class="yc item discount-item" style="display: block; text-align: center">
+                            <img class="w-25" width=100px; src="{% static 'images/tick.png' %}">
+                            <h5 class="pt-4 pb-3 m-0 text-center">پرداخت شما با موفقیت انجام شد.</h5>
+                            <div class="mx-auto my-1" style="margin-top:30px;text-align: center;">
+                                <a href="{% url 'Subscription' %}" style="border: 1px solid dodgerblue;border-radius: 10px;background: deepskyblue;color: white;padding: 10px;" class="text-center">بازگشت</a>
+                            </div>
+                        </div>
+                    {% elif msg == '2' %}
+                        <div class="yc item discount-item" style="display: block; text-align: center">
+                            <img class="w-25" width=100px; src="{% static 'images/close.png' %}">
+                            <h5 class="pt-4 pb-3 m-0 text-center">پرداخت ناموفق بود. لطفا دوباره تلاش کنید.</h5>
+                            <div class="mx-auto my-1" style="margin-top:30px;text-align: center;">
+                                <a href="{% url 'Subscription' %}" style="border: 1px solid dodgerblue;border-radius: 10px;background: deepskyblue;color: white;padding: 10px;" class="text-center">بازگشت</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+{% endblock %}

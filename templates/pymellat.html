@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mellat</title>
+</head>
+<body>
+<form id="form" name="input" action="https://bpm.shaparak.ir/pgwchannel/startpay.mellat" method="POST">
+    <input class="form-control" type="hidden" value="{{ ref_id }}" name="RefId" id="RefId">
+</form>
+<script>
+    window.onload(document.getElementById('form').submit())
+</script>
+</body>
+</html>

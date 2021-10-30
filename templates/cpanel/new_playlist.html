@@ -1,0 +1,55 @@
+{% extends 'cpanel/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Evafilm Admin{% endblock %}
+
+{% block breadcrumbitm %}
+    <li class="breadcrumb-item"><a href="{% url 'admin_playlists' %} ">لیست فیلم و سریال ها</a></li>
+    <li class="breadcrumb-item active">جدید</li>
+{% endblock %}
+
+{% block content %}
+    <div class="container pt-4 ">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8 col-sm-12 pt-4">
+                {% if msg == 1 %}
+                    <div class="alert alert-danger">
+                        فیلمی با این مشخصات قبلا ثبت شده است.
+                    </div>
+                {% elif msg == 2 %}
+                    <div class="alert alert-danger">
+                    به نظر میرسد اطلاعات وارد شده درست نیست.
+                    </div>
+                {% endif %}
+                <div class="card  bg-light">
+                    <div class="card-body">
+                        <h3 class="card-title text-dark text-center">تعریف فیلم/سریال جدید</h3>
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+
+                            {% for field in form.visible_fields %}
+                                <div class="form-group d-block">
+                                    <label class="text-dark" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {% if field.name == 'category' or field.name == 'actor' %}
+                                    {{ field|add_class:'form-control ltr' }}
+                                    {% else %}
+                                    {{ field|add_class:'form-control' }}
+                                    {% endif %}
+
+                                    {% for error in field.errors %}
+                                        <span class="help-block">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                            <br>
+                            <button type="submit" class="btn btn-success btn-block">ثبت</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

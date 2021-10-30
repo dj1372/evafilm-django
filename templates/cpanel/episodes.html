@@ -1,0 +1,72 @@
+{% extends 'cpanel/base.html' %}
+
+{% block title %}Evafilm{% endblock %}
+
+{% block breadcrumbitm %}
+    <li class="breadcrumb-item"><a href="{% url 'admin_playlists' %}">لیست فیلم و سریال ها</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'admin_seasons' playlist.id %}">فصل های {{ playlist.name_en }}</a></li>
+    <li class="breadcrumb-item active">فصل {{ season.name }}</li>
+{% endblock %}
+
+{% block content %}
+    <div class="container pt-4">
+        <div>
+            <h3 class="text-light float-right">لیست اپیزودهای {{ playlist.name_en }}</h3>
+            <a class="btn btn-success float-left mb-2"
+               href="{% url 'admin_new_episode' playlist.id season.name %}">اپیزود جدید</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped text-center" dir="rtl">
+                <thead class="thead-dark">
+                <tr class="text-light">
+                    <th class="align-middle">فیلم/سریال</th>
+                    <th class="align-middle">فصل</th>
+                    <th class="align-middle">اپیزود</th>
+                    <th class="align-middle">URL</th>
+                    <th class="align-middle">سانسور</th>
+                    <th class="align-middle">امکانات</th>
+                </tr>
+                </thead>
+                <tbody class="text-light">
+
+                {% for episode in episodes %}
+                    <tr>
+                        <td class="align-middle">
+                            <a target="_blank" class="text-light"
+                               href="{% url 'Home' %}{{ episode.playlist.page_url }}">{{ episode.playlist.name_en }}</a>
+                        </td>
+                        <td class="align-middle">
+                            {{ episode.season.name }}
+                        </td>
+                        <td class="align-middle">
+                            {{ episode.index }}
+                        </td>
+                        <td class="align-middle" dir="ltr">
+                            {{ episode.playlist.id }}0{{ episode.season.name }}0{{ episode.index }}
+                        </td>
+                        <td class="align-middle">
+                            <a class="btn btn-info text-light"
+                               href="{% url 'StartCensor' playlist.id season.name episode.index %}">تایم تیتراژ</a>
+                            <a class="btn btn-secondary text-light"
+                               href="{% url 'MiddelCensor' playlist.id season.name episode.index %}">سانسور بین فیلم</a>
+                            <a class="btn btn-primary text-light"
+                               href="{% url 'EndCensor' playlist.id season.name episode.index %}">تیتراژ پایانی</a>
+                        </td>
+                        <td class="align-middle">
+{#                            <a class="btn btn-info text-light"#}
+{#                               href="{% url 'admin_timing_episode' playlist.id season.name episode.index %}">تایمینگ</a>#}
+                            <a class="btn btn-warning text-light"
+                               href="{% url 'admin_edit_episode' playlist.id season.name episode.index %}">ویرایش</a>
+                            {% if user.is_superuser %}
+                                <a class="btn btn-danger text-light"
+                                   href="{% url 'admin_delete_episode' playlist.id season.name episode.index %}">حذف</a>
+
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

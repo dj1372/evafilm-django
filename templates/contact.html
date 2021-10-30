@@ -1,0 +1,52 @@
+{% extends 'base(original).html' %}
+{% load static %}
+{% block title %}دسته بندی{% endblock %}
+{% block custom_css %}
+
+{% endblock %}
+{% block content %}  <div class="yc pages">
+	<div class="main-pages">
+		<h1 class="yc-400 yc-align yc yc-23">تماس با ما</h1>
+    {% if msg == 1 %}
+        <h2>
+            پیام شما با موفقیت ارسال شد.
+        </h2>
+    {% endif %}
+		<div class="yc content">
+			<p>تماس با تیم پشتیبانی ایوا فیلم</p>
+
+          <p>کاربر گرامی. در صورتی که فیلم یا سریال خاصی مورد نظر شماست که در رسانه اینترنتی ایوافیلم موجود نیست آن را درخواست نمایید.</p>
+<!--          <span class="p-2">تلفن تماس : ۹۱۰۰۰۱۱۱-۰۲۱</span>-->
+<!--          <span class="p-2">ایمیل : evamaster@evafilm.ir</span><br>-->
+          <p class="p-4 text-right">
+              همچنین برای پیگیری خرید اشتراک، گزارش موارد خاص مربوط به محتوا و یا ارسال پیشنهادات و انتقادات نیز برای ما پیام بفرستید.
+          </p>
+<p>&nbsp;</p>
+<div role="form" class="wpcf7" id="wpcf7-f239-o1" lang="fa-IR" dir="rtl">
+<div class="screen-reader-response"><p role="status" aria-live="polite" aria-atomic="true"></p> <ul></ul></div>
+<form action="" method="post" class="wpcf7-form init">
+    {% csrf_token %}
+<div style="display: none;">
+</div>
+<p><label> نام و نام خانوادگی </label><br />
+    <span class="wpcf7-form-control-wrap your-name"><input type="text" name="name" id="txtName" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" placeholder="نام و نام خانوادگی" required/></span></p>
+<p><label> ایمیل</label><br />
+    <span class="wpcf7-form-control-wrap your-email"><input type="email" name="email" id="txtEmail" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-required wpcf7-validates-as-email" aria-required="true" aria-invalid="false" placeholder="ایمیل" required/></span></p>
+<p><label> شماره تلفن</label><br />
+    <span class="wpcf7-form-control-wrap your-name"><input type="text" name="phone" id="txtPhoneNumber" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" placeholder="شماره تلفن همراه" required/></span></p>
+<p><label> توضیحات</label><br />
+<span class="wpcf7-form-control-wrap textarea-947"><textarea id="txtDescription" name="message" cols="40" rows="10" class="wpcf7-form-control wpcf7-textarea wpcf7-validates-as-required" aria-required="true" aria-invalid="false" placeholder="توضیحات" ></textarea></span></p>
+<p><input type="submit" value="ارسال نظر"  class="wpcf7-form-control wpcf7-submit" /></p>
+
+<div class="wpcf7-response-output" aria-hidden="true"></div>
+</form></div>
+		</div>
+	</div>
+</div>
+
+<script>
+    jQuery(document).ready(function() {
+        $('body').addClass('buy-body');
+    });
+</script>
+{% endblock %}

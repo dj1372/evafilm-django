@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}{{ episode.playlist.get_type_display }} {{ episode.playlist.name_fa }} | {{ episode.playlist.name_en }}{% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/plyr.css' %}">
+        <link rel="stylesheet" href="{% static 'css/plyr_custom.css' %}">
+        <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+        <link rel="icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+        <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+        <script src="{% static 'js/main.js' %}"></script>
+        <script src="{% static 'js/plyr.min.js' %}"></script>
+        <script src="{% static 'js/polyfill.min.js' %}"></script>
+        <script src="{% static 'js/hls.min.js' %}"></script>
+    </head>
+    <body>
+        <div class="player-con" style="width: 100%!important; height: 100%!important;">
+            <div class="row">
+                <div class="col plyr--full-ui plyr--fullscreen-enabled plyr--fullscreen-fallback plyr__control--forward plyr__control--back plyr--pip-supported">
+                    <video  autoplay controls crossorigin playsinline data-poster="https://evafilm.stream/media/p/{{ episode.playlist.thumb_image }}">
+                        <source type="application/x-mpegURL" src="{{ episode.stream_url }}">
+                        <track kind="captions" label="فارسی" srclang="fa" src="{{ episode.subtitle_vtt_url }}" default>
+                    </video>
+                </div>
+            </div>
+        </div>
+        <script>
+            // get is_censor_on from user profile
+            const is_censor_on = {% if user.Profile.is_censor_on %}true{% else %}false{% endif %};
+
+            document.addEventListener("DOMContentLoaded", function() {
+
+                $.ajaxSetup({
+                    headers: {
+                        "X-CSRFToken": getCookie("csrftoken")
+                    }
+                });
+
+                const video = document.querySelector("video");
+                const source = video.getElementsByTagName("source")[0].src;
+
+                const defaultOptions = {};
+
+                if (Hls.isSupported()) {
+                    const hls = new Hls();
+                    hls.loadSource(source);
+                    hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
+                        const availableQualities = hls.levels.map((l) => l.height)
+                        defaultOptions.quality = {
+                            default: availableQualities[0],
+                            options: availableQualities,
+                            forced: true,
+                            onChange: (e) => updateQuality(e),
+                        }
+            // ###########################################################################################################
+                        defaultOptions.clickToPlay = false;
+                        const player = new Plyr(video, defaultOptions);
+
+                        player.on('controlshidden', function(){
+                            $("#return-btn").fadeOut();
+                        })
+                        player.on('controlsshown', function(){
+                            $("#return-btn").fadeIn();
+                        })
+
+                        var timer = 0;
+                        var delay = 200;
+                        var prevent = false;
+                        var is_mobile = false;
+
+                        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent.toLowerCase()) ) {
+                            is_mobile = true;
+                        }
+
+                        /* Clicks Events */
+                        $(document).on('click', '.plyr__video-wrapper', function (e) {
+                            var offset = this.getClientRects();
+                            var player_w = offset[0].width;
+                            var click_x = e.clientX - offset[0].left;
+                            timer = setTimeout(function () {
+                                if (!prevent) {
+                                    is_mobile ? doClick_mobile(player_w, click_x) : doClick_desktop();
+                                }
+                                prevent = false;
+                            }, delay);
+                        }).on('dblclick', '.plyr__video-wrapper', function (e) {
+                            var offset = this.getClientRects();
+                            var player_w = offset[0].width;
+                            var click_x = e.clientX - offset[0].left;
+                            clearTimeout(timer);
+                            prevent = true;
+                            is_mobile ? doDoubleClick_mobile(player_w, click_x) : doDoubleClick_desktop(player_w, click_x);
+                        });
+
+                        /* Desktop */
+                        function doClick_desktop() {
+                            player.paused ? player.play() : player.pause();
+                        }
+                        function doDoubleClick_desktop(player_w, click_x) {
+                            (player_w / 2) - click_x > 0 ? (player.currentTime = player.currentTime - 10) : (player.currentTime = player.currentTime + 10);
+                        }
+
+                        /* Smartphone */
+                        function doClick_mobile(player_w, click_x) {
+                            if ($('.plyr--video .plyr__controls').css("opacity") > 0.99) {
+                                if ((player_w / 3) - click_x > 0) {
+                                    player.currentTime = player.currentTime - 10;
+                                }
+
+                                if (click_x - (player_w / 3) > 0 && (2 * (player_w / 3)) - click_x > 0) {
+                                    player.paused ? player.play() : player.pause();
+                                }
+
+                                if (click_x - ((player_w / 3) * 2) > 0) {
+                                    player.currentTime = player.currentTime + 10;
+                                }
+                            } else {
+                                if (!$('.plyr__video-wrapper').find('.player-custom-icons').length > 0) {
+                                    $('.plyr__video-wrapper').append('<div class="player-custom-icons"><img src="https://evafilm.stream/static/images/backward.svg"><img src="https://evafilm.stream/static/images/play.svg"><img src="https://evafilm.stream/static/images/forward.svg"></div>')
+                                }
+                            }
+                        }
+
+                        function doDoubleClick_mobile(player_w, click_x) {
+                            if ($('.plyr--video .plyr__controls').css("opacity") > 0.99) {
+                                clearTimeout(timer);
+                                prevent = true;
+                                doDbltapAction(player_w, click_x);
+                            }
+                            else {
+                                $('.plyr .plyr__controls').addClass('hidden');
+                                doClick_mobile(player_w, click_x);
+                            }
+                        }
+
+                        $(document).on('click', '.position-modal span.yes', function () {
+                            var yes_button = $(this);
+                            var last_position = yes_button.attr('data-last_position');
+                            if (player.playing && parseInt(last_position) > 10) {
+                                player.currentTime = parseInt(last_position);
+                            }
+
+                            if (!player.playing && parseInt(last_position) > 10) {
+                                player.play();
+                                player.on('play', function (e) {
+                                    if (player.currentTime < 1) {
+                                        player.currentTime = parseInt(last_position);
+                                    }
+                                });
+                            }
+                            $(this).closest('.position-modal').remove();
+                        });
+
+                        $(document).on('click', '.position-modal span.no', function () {
+                            $(this).closest('.position-modal').remove();
+                        });
+
+                        $(document).ready(function () {
+                            $.ajax({
+                                type: 'POST',
+                                url: '/get_last_position/',
+                                data: {
+                                    post_id: '{{ episode.id }}',
+                                   _token: '{{ user.Profile.api_token }}',
+                                },
+                                error: function () {
+                                },
+                                success: function (data) {
+                                    if (parseInt(data.last_position) > 1) {
+                                        var position_modal = '<div class="position-modal"><div class="container"><div class="text">آیا می خواهید از آخرین موقعیت پلی شود ؟</div><div class="buttons"><span class="yes" data-last_position="' + data.last_position + '">بله</span><span class="no">نه</span></div></div></div>'
+                                        $('body .plyr.plyr--full-ui').append(position_modal);
+                                        $('.plyr__video-wrapper').attr('allow_set_position', 'true');
+                                    }
+                                },
+                            });
+
+                            var all_play_dur = 0;
+                            setInterval(() => {
+                                var the_time = player.currentTime;
+                                if (player.playing) {
+                                    all_play_dur = all_play_dur + 10;
+                                }
+                                if (parseInt(the_time) < 900) {
+                                    return;
+                                }
+                                if ($('.plyr__video-wrapper').attr('allow_set_position') !== 'true') {
+                                    if (all_play_dur > 600) {
+                                        return;
+                                    }
+                                }
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/set_last_position/',
+                                    data: {
+                                        post_id: '{{ episode.id }}',
+                                        last_position: the_time.toFixed(0),
+                                        _token: '{{ user.Profile.api_token }}',
+                                    },
+                                    error: function () {
+
+                                    },
+                                    success: function (data) {
+                                    },
+                                });
+                            }, 10000);
+                        });
+            // ###########################################################################################################
+                        player.eventListeners.forEach(function(eventListener) {
+                            if(eventListener.type === 'dblclick') {
+                                eventListener.element.removeEventListener(eventListener.type, eventListener.callback, eventListener.options);
+                            }
+                        });
+                        if (is_censor_on) {
+                            $.ajax({
+                                url: "https://evafilm.stream/Censor/api/v1/li/{{ episode.id }}/?format=json",
+                                method: "GET",
+                                data: {episode: {{ episode.pk }}, token: '{{ user.Profile.api_token }}'},
+                                success: function(r){
+                                    var entryStart = parseInt(r.ti.s);
+                                    var entryEnd = parseInt(r.ti.e);
+                                    var cnsr = r.ce;
+                                    //console.log("cnsr: r.ce");
+                                    setInterval(function(){
+                                        if(player.currentTime > entryStart && player.currentTime < entryEnd){
+                                            $("#entry-btn").fadeIn();
+                                            $("#entry-btn").off('click');
+                                            $("#entry-btn").click(function(){
+                                                player.currentTime = entryEnd;
+                                            })
+                                        }else{
+                                            $("#entry-btn").fadeOut();
+                                        }
+                                        for(var item of cnsr){
+                                            var s = parseInt(item.s);
+                                            var e = parseInt(item.e);
+                                            if(player.currentTime > s && player.currentTime < e){
+                                            player.currentTime = e;
+                                            break;
+                                            }
+                                        }
+                                    }, 500)
+                                }
+                            })
+                        } else {
+                            //console.log("Censor: Off");
+                        }
+
+                        setTimeout(function(){
+                            $(".plyr").append(`
+                            <div class="player-con-header">
+                            <img src="https://evafilm.stream/static/images/logo.png" class="logo"/>
+                            <div class="player-con-header">
+                            <div class="back-btn farsi">
+                                <a class="btn btn-dark farsi" type="button" id="return-btn" href="{% url 'Home' %}{{ episode.playlist.page_url }}">
+                            {% if episode.playlist.Episodes.count == 1 %}{{ episode.playlist.name_fa }}{% else %}
+                                 فصل
+                                {{ episode.season.name }}
+                                 قسمت
+                                {{ episode.index }}
+                                 سریال
+                                {{ episode.playlist.name_fa }}
+                            {% endif %}
+                            &nbsp;<i class="fa fa-info-circle"></i></a>
+                            </div>
+                            </div>
+                            <a class="btn btn-dark" type="button" id="entry-btn">رد کردن تیتراژ&nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a>
+                            <a class="btn btn-dark" type="button" id="next-btn">شاهده قسمت بعدی&nbsp;&nbsp;<i class="fa fa-step-forward"></i></a>
+                            `)
+                        }, 2000)
+                    });
+                    hls.attachMedia(video);
+                    window.hls = hls;
+                } else {
+                    // default options with no quality update in case Hls is not supported
+
+// ###########################################################################################################
+                    defaultOptions.clickToPlay = false;
+                    const player = new Plyr(video, defaultOptions);
+
+                    player.on('controlshidden', function(){
+                        $("#return-btn").fadeOut();
+                    })
+                    player.on('controlsshown', function(){
+                        $("#return-btn").fadeIn();
+                    })
+
+                    var timer = 0;
+                    var delay = 200;
+                    var prevent = false;
+                    var is_mobile = false;
+
+                    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent.toLowerCase()) ) {
+                        is_mobile = true;
+                    }
+
+                    /* Clicks Events */
+                    $(document).on('click', '.plyr__video-wrapper', function (e) {
+                        var offset = this.getClientRects();
+                        var player_w = offset[0].width;
+                        var click_x = e.clientX - offset[0].left;
+                        timer = setTimeout(function () {
+                            if (!prevent) {
+                                is_mobile ? doClick_mobile(player_w, click_x) : doClick_desktop();
+                            }
+                            prevent = false;
+                        }, delay);
+                    }).on('dblclick', '.plyr__video-wrapper', function (e) {
+                        var offset = this.getClientRects();
+                        var player_w = offset[0].width;
+                        var click_x = e.clientX - offset[0].left;
+                        clearTimeout(timer);
+                        prevent = true;
+                        is_mobile ? doDoubleClick_mobile(player_w, click_x) : doDoubleClick_desktop(player_w, click_x);
+                    });
+
+                    /* Desktop */
+                    function doClick_desktop() {
+                        player.paused ? player.play() : player.pause();
+                    }
+                    function doDoubleClick_desktop(player_w, click_x) {
+                        (player_w / 2) - click_x > 0 ? (player.currentTime = player.currentTime - 10) : (player.currentTime = player.currentTime + 10);
+                    }
+
+                    /* Smartphone */
+                    function doClick_mobile(player_w, click_x) {
+                        if ($('.plyr--video .plyr__controls').css("opacity") > 0.99) {
+                            if ((player_w / 3) - click_x > 0) {
+                                player.currentTime = player.currentTime - 10;
+                            }
+
+                            if (click_x - (player_w / 3) > 0 && (2 * (player_w / 3)) - click_x > 0) {
+                                player.paused ? player.play() : player.pause();
+                            }
+
+                            if (click_x - ((player_w / 3) * 2) > 0) {
+                                player.currentTime = player.currentTime + 10;
+                            }
+                        } else {
+                            if (!$('.plyr__video-wrapper').find('.player-custom-icons').length > 0) {
+                                $('.plyr__video-wrapper').append('<div class="player-custom-icons"><img src="https://evafilm.stream/static/images/backward.svg"><img src="https://evafilm.stream/static/images/play.svg"><img src="https://evafilm.stream/static/images/forward.svg"></div>')
+                            }
+                        }
+                    }
+
+                    function doDoubleClick_mobile(player_w, click_x) {
+                        if ($('.plyr--video .plyr__controls').css("opacity") > 0.99) {
+                            clearTimeout(timer);
+                            prevent = true;
+                            doDbltapAction(player_w, click_x);
+                        }
+                        else {
+                            $('.plyr .plyr__controls').addClass('hidden');
+                            doClick_mobile(player_w, click_x);
+                        }
+                    }
+
+                    $(document).on('click', '.position-modal span.yes', function () {
+                        var yes_button = $(this);
+                        var last_position = yes_button.attr('data-last_position');
+                        if (player.playing && parseInt(last_position) > 10) {
+                            player.currentTime = parseInt(last_position);
+                        }
+
+                        if (!player.playing && parseInt(last_position) > 10) {
+                            player.play();
+                            player.on('play', function (e) {
+                                if (player.currentTime < 1) {
+                                    player.currentTime = parseInt(last_position);
+                                }
+                            });
+                        }
+                        $(this).closest('.position-modal').remove();
+                    });
+
+                    $(document).on('click', '.position-modal span.no', function () {
+                        $(this).closest('.position-modal').remove();
+                    });
+
+                    $(document).ready(function () {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/get_last_position/',
+                            data: {
+                                post_id: '{{ episode.id }}',
+                               _token: '{{ user.Profile.api_token }}',
+                            },
+                            error: function () {
+                            },
+                            success: function (data) {
+                                if (parseInt(data.last_position) > 1) {
+                                    var position_modal = '<div class="position-modal"><div class="container"><div class="text">آیا می خواهید از آخرین موقعیت پلی شود ؟</div><div class="buttons"><span class="yes" data-last_position="' + data.last_position + '">بله</span><span class="no">نه</span></div></div></div>'
+                                    $('body .plyr.plyr--full-ui').append(position_modal);
+                                    $('.plyr__video-wrapper').attr('allow_set_position', 'true');
+                                }
+                            },
+                        });
+
+                        var all_play_dur = 0;
+                        setInterval(() => {
+                            var the_time = player.currentTime;
+                            if (player.playing) {
+                                all_play_dur = all_play_dur + 10;
+                            }
+                            if (parseInt(the_time) < 900) {
+                                return;
+                            }
+                            if ($('.plyr__video-wrapper').attr('allow_set_position') !== 'true') {
+                                if (all_play_dur > 600) {
+                                    return;
+                                }
+                            }
+                            $.ajax({
+                                type: 'POST',
+                                url: '/set_last_position/',
+                                data: {
+                                    post_id: '{{ episode.id }}',
+                                    last_position: the_time.toFixed(0),
+                                    _token: '{{ user.Profile.api_token }}',
+                                },
+                                error: function () {
+
+                                },
+                                success: function (data) {
+                                },
+                            });
+                        }, 10000);
+                    });
+// ###########################################################################################################
+
+                    if (is_censor_on) {
+                        $.ajax({
+                            url: "https://evafilm.stream/Censor/api/v1/li/{{ episode.id }}/?format=json",
+                            method: "GET",
+                            data: {episode: {{ episode.pk }}, token: '{{ user.Profile.api_token }}'},
+                            success: function(r){
+                                var entryStart = parseInt(r.ti.s);
+                                var entryEnd = parseInt(r.ti.e);
+                                var cnsr = r.ce;
+                                //console.log("cnsr: r.ce");
+                                setInterval(function(){
+                                    if(player.currentTime > entryStart && player.currentTime < entryEnd){
+                                        $("#entry-btn").fadeIn();
+                                        $("#entry-btn").off('click');
+                                        $("#entry-btn").click(function(){
+                                            player.currentTime = entryEnd;
+                                        })
+                                    }else{
+                                        $("#entry-btn").fadeOut();
+                                    }
+                                    for(var item of cnsr){
+                                        var s = parseInt(item.s);
+                                        var e = parseInt(item.e);
+                                        if(player.currentTime > s && player.currentTime < e){
+                                        player.currentTime = e;
+                                        break;
+                                        }
+                                    }
+                                }, 500)
+                            }
+                        })
+                    } else {
+                        //console.log("Censor: Off");
+                    }
+                    setTimeout(function(){
+                        $(".plyr").append(`
+                        <div class="player-con-header">
+                        <img src="https://evafilm.stream/static/images/logo.png" class="logo"/>
+                        <div class="back-btn">
+                            <a class="btn btn-dark farsi" type="button" id="return-btn" href="{% url 'Home' %}{{ episode.playlist.page_url }}">
+                        {% if episode.playlist.Episodes.count == 1 %}{{ episode.playlist.name_fa }}{% else %}
+                             فصل
+                            {{ episode.season.name }}
+                             قسمت
+                            {{ episode.index }}
+                             سریال
+                            {{ episode.playlist.name_fa }}
+                        {% endif %}
+                        &nbsp;<i class="fa fa-info-circle"></i></a>
+                        </div>
+                    </div>
+                    <a class="btn btn-dark" type="button" id="entry-btn">رد کردن تیتراژ&nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a>
+                    <a class="btn btn-dark" type="button" id="next-btn">قسمت بعدی&nbsp;&nbsp;<i class="fa fa-step-forward"></i></a>
+                        `)
+                    }, 2000)
+                }
+                function updateQuality(newQuality) {
+                    window.hls.levels.forEach((level, levelIndex) => {
+                        if (level.height === newQuality) {
+                            window.hls.currentLevel = levelIndex;
+                        }
+                    });
+                }
+                });
+        </script>
+    </body>
+</html>

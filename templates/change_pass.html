@@ -1,0 +1,43 @@
+{% extends 'base(login).html' %}
+{% load static %}
+{% block title %}تغییر رمز عبور{% endblock %}
+
+{% block content %}
+<div class="yc user-panel-form">
+    <div class="panel-main">
+        <div class="head yc">
+            <a href="index.html"><img src="{% static 'x-logo/logo.png' %}" title="ایوافیلم" alt="ایوافیلم" class="yc logo"></a>
+        </div>
+        <div class="form yc">
+            <h1 class="yc yc-fff yc-20 yc-bold">تغییر رمز عبور</h1>
+            {% if msg == 1 %}
+                    <div class="alert alert-success">
+                        رمز عبور شما با موفقیت تغییر یافت.
+                    </div>
+            {% endif %}
+            <form class="yc" method="post" action="" id="change_pass">
+              {% csrf_token %}
+                <input type="password" placeholder="رمز عبور فعلی خود را وارد کنید" name="opsw" id="opsw" required class="input" />
+                <input type="password" placeholder="رمز عبور جدید را وارد کنید" name="npsw" id="npsw" required class="input" />
+                <input type="password"  placeholder="تکرار رمز عبور جدید را وارد کنید" name="rpsw" id="rpsw" required class="input" />
+                <button name="submit" onclick="change_pass();" value="تغییر رمزعبور" class="submit">تغییر رمزعبور</button>
+                <div id="alert" class="alert alert-danger" style="display: none">
+                    رمز عبور و تکرار رمز عبور برابر نیستند.
+                </div>
+                <script>
+                    function change_pass(){
+                        var new_pass = $('#npsw').val();
+                        var renew_pass = $('#rpsw').val();
+                        console.alert(new_pass + ' ' + renew_pass)
+                        if(new_pass==renew_pass){
+                            $('#change_pass').submit();
+                        } else{
+                            $('#alert').removeAttr('style');
+                        }
+                    }
+                </script>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

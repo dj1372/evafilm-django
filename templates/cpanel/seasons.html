@@ -1,0 +1,53 @@
+{% extends 'cpanel/base.html' %}
+
+{% block title %}Evafilm{% endblock %}
+
+{% block breadcrumbitm %}
+    <li class="breadcrumb-item"><a href="{% url 'admin_playlists' %} ">لیست فیلم و سریال ها</a></li>
+    <li class="breadcrumb-item active">فصل های {{ playlist.name_en }}</li>
+{% endblock %}
+
+{% block content %}
+    <div class="container pt-4">
+    <div>
+        <h3 class="text-light float-right">لیست فصل های  {{ playlist.name_en }}</h3>
+        <a class="btn btn-success float-left mb-2" href="{% url 'admin_new_season' playlist.id %}">فصل جدید</a>
+    </div>
+    <div class="table-responsive">
+    <table class="table" dir="rtl">
+        <thead class="thead-dark">
+            <tr class="text-light">
+                <th>نام فیلم/سریال</th>
+                <th>نام فصل</th>
+                <th>تعداد اپیزودها</th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody class="text-light">
+
+            {% for season in seasons %}
+            <tr>
+                <td class="align-middle">
+                    <a target="_blank" class="text-light" href="{% url 'Home' %}{{ season.playlist.page_url }}">{{ season.playlist.name_en }}</a>
+                </td>
+                <td class="align-middle">
+                    {{ season.name }}
+                </td>
+                <td class="align-middle">
+                    {{ season.Episodes.count }}
+                </td>
+                <td>
+                    <a class="btn btn-info text-light" href="{% url 'admin_episodes' playlist.id season.name %}">اپیزودها</a>
+                    <a class="btn btn-secondary text-light" href="{% url 'admin_edit_season' playlist.id season.name %}">ویرایش</a>
+                    {% if user.is_superuser %}
+                        <a class="btn btn-danger text-light" href="{% url 'admin_delete_season' playlist.id season.name %}">حذف</a>
+                    {% endif %}
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    </div>
+{% endblock %}

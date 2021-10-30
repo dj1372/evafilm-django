@@ -1,0 +1,105 @@
+{% extends 'base(login).html' %}
+{% load static %}
+
+{% block title %}ورود/ثبت نام{% endblock %}
+
+{% block content %}
+
+<div class="yc user-panel-form">
+    <div class="panel-main">
+        <div class="head yc">
+            <a href="{% url 'Home' %}"><img src="{% static 'x-logo/logo.png' %}" title="ایوافیلم" alt="ایوافیلم" class="yc logo"></a>
+            <a href="{% url 'Login' %}" class="left yc-fff switch-btn" title="ورود">ورود</a>
+        </div>
+        <div class="form yc">
+            <h1 class="yc yc-fff yc-20 yc-bold">تکمیل ثبت نام</h1>
+            {% if alert %}
+                {% if 'خطا' in alert %}
+                    <div class="alert alert-danger">
+                        {{ alert }}
+                    </div>
+                {% else %}
+                    <div class="alert alert-success">
+                        {{ alert }}
+                    </div>
+                {% endif %}
+            {% endif %}
+            <form autocomplete="off" class="yc" method="post" action="">
+              {% csrf_token %}
+                <h2 class="yc yc-13 yc-400">لطفا اطلاعات زیر را تکمیل نمایید.</h2>
+                <input autocomplete="false" type="text" id="txtName" name="f_name" value="{{ first_name }}" placeholder="نام" class="input" required>
+                <input autocomplete="false" type="text" id="txtFamily" name="l_name" value="{{ last_name }}" placeholder="نام خانوادگی" class="input" required>
+                <input type="email" id="txtEmail" name="E_user" value="{{ email }}" placeholder="ایمیل" class="input" required>
+                <h2 class="yc yc-fff yc-20 yc-bold"> </h2>
+                <p dir="rtl" style="color: whitesmoke" class="yc-16">رمزعبور باید دارای شرایط زیر باشد:</p>
+                <p dir="rtl" style="color: whitesmoke" class="yc-14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - رمز عبور حداقل 8 کاراکتر باشد.</p>
+                <p dir="rtl" style="color: whitesmoke" class="yc-14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - رمزعبور باید ترکیبی از حرف و عدد باشد.</p>
+                <input autocomplete="false" type="password" id="txtPassword" name="pass" minlength="8"  placeholder="رمز عبور" class="input" required>
+                <input autocomplete="false" type="password" id="txtConfirmPassword" name="repass" placeholder="تکرار رمز عبور" class="input" required>
+                <p class="p-3 yc-14" dir="rtl"><input type="checkbox" id="checkbox" onclick="visiblepass()" /> <span style="color: #ffffff;">رمز عبور نمایش داده شود</span></p>
+                <h2 class="yc yc-fff yc-20 yc-bold"> </h2>
+                <input autocomplete="false" type="text" id ="invcode" name="code" value="" placeholder="کد معرف" class="input">
+                <input  class="d-none" style="display:none;" value="{{ state }}" type="text" name="state" id="state">
+                <input type="text" id="mobile" name="mobile" value="{{ mobile }}" placeholder="شماره موبایل"  class="d-none" style="display:none;">
+                <input type="submit" id='sendNewSms' disabled="disabled" name="submit" style="background:gray;" value="ثبت نام" class="submit">
+            </form>
+                <h2 class="yc yc-fff yc-20 yc-bold"> </h2>
+                <p class="p-3" dir="rtl"><input type="checkbox" id="checkbutt" onclick="enablebutt()" /><a href="https://evafilm.stream/terms/" target="_blank" rel="noopener" title="شرایط و قوانین استفاده"><span style="text-decoration: underline;"><span style="color: #3366ff; text-decoration: underline;"><span class="text-blue"> شرایط و قوانین سایت</span></span></span></a> <span style="color: #ffffff;">را کامل مطالعه کرده و می پذیرم.</span></p>
+                <h2 class="yc yc-fff yc-20 yc-bold"> </h2>
+                <h2 class="yc yc-fff yc-20 yc-bold"> </h2>
+                {% if alert %}
+                    {% if 'خطا' in alert %}
+                        <div class="alert alert-danger">
+                            {{ alert }}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success">
+                            {{ alert }}
+                        </div>
+                    {% endif %}
+                {% endif %}
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    function visiblepass() {
+      var x = document.getElementById("txtPassword");
+      var y = document.getElementById("txtConfirmPassword");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+      if (y.type === "password") {
+        y.type = "text";
+      } else {
+        y.type = "password";
+      }
+    }
+    function enablebutt() {
+        var enb = document.getElementById("checkbutt");
+        var sendbtn = document.getElementById('sendNewSms');
+        if(enb.checked){
+        sendbtn.disabled = false;
+        document.getElementById("sendNewSms").style.background = "#1993ff"
+        } else {
+        sendbtn.disabled = true;
+        document.getElementById("sendNewSms").style.background = "#808080"
+        }
+    }
+
+    // var checker = document.getElementById('checkme');
+    // var sendbtn = document.getElementById('sendNewSms');
+    // // when unchecked or checked, run the function
+    // checker.onchange = function(){
+    //     if(this.checked){
+    //     sendbtn.disabled = false;
+    //     document.getElementById("sendNewSms").style.background = "#1993ff"
+    //     } else {
+    //     sendbtn.disabled = true;
+    //     document.getElementById("sendNewSms").style.background = "#808080"
+    //     }
+    // }
+</script>
+{% endblock %}

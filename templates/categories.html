@@ -1,0 +1,22 @@
+{% extends 'base(original).html' %}
+{% load static %}
+{% block title %}دسته بندی{% endblock %}
+{% block custom_css %}{% endblock %}
+{% block content %}
+<div class="yc main-site">
+    <section class="yc site-categories">
+	    <ul class="main">
+            {% for category in categories %}
+                <li class="right yc-relative">
+            <a href="{% url 'Home' %}tag/{{ category.page_url }}" class="yc">
+                <img src="{% url 'Home' %}media/{{ category.image }}" class="yc" alt="{{ category.name_fa }}">
+                <div class="content yc yc-center">
+                    <h2 class="yc-fff yc-30 yc-400 yc">{{ category.name_fa }}</h2>
+                </div>
+            </a>
+        </li>
+        {% endfor %}
+            </ul>
+	</section>
+</div>
+{% endblock %}

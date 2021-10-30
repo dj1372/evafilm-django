@@ -1,0 +1,36 @@
+{% extends 'base(login).html' %}
+{% load static %}
+
+{% block title %}ورود/ثبت نام{% endblock %}
+
+{% block content %}
+<br>
+<br>
+<div class="yc user-panel-form">
+    <div class="panel-main">
+        <div class="head yc">
+            <a href="{% url 'Home' %}"><img src="{% static 'x-logo/logo.png' %}" title="ایوافیلم" alt="ایوافیلم" class="yc logo"></a>
+            <a href="{% url 'Signup' %}" class="left yc-fff switch-btn" title="ثبت نام">ثبت نام</a>
+        </div>
+        <div class="form yc">
+            <h1 class="yc yc-fff yc-20 yc-bold">ورود از طریق شماره تلفن همراه</h1>
+            <form class="yc" method="post" action="">
+              {% csrf_token %}
+              <label  for="txtNumber">
+                <h2 class="yc yc-13 yc-400">لطفا شماره تلفن خود را وارد کنید</h2>
+                <input style="direction:LTR" type="text" name="phone"  id="txtNumber" value="{{ phone }}" placeholder="09**********" required class="input" />
+                <input style="direction:LTR" type="password" name="password" id="txtPassword" value="{{ password }}" placeholder="رمز عبور" required class="input" />
+                {% if message is not None %}
+                    <div class="panel-alert">
+                        {{ message }}
+                    </div>
+                {% endif %}
+                <input type="submit" name="submit" value="ورود" class="submit">
+                <a href="{% url 'ForgetPassword' %}" class="yc yc-align yc-fff yc-14 yc-400 forget">رمز عبور خود را فراموش کرده ام</a>
+                <br />
+              </label>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

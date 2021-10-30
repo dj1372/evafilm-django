@@ -1,0 +1,84 @@
+{% extends 'base(subscription).html' %}
+{% load static %}
+{% block title %}پروفایل{% endblock %}
+
+{% block custom_css %}
+    <script type='text/javascript' src="{% static 'js/main.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="yc pages">
+    <div class="main-pages">
+        <h1 class="yc-400 yc-align yc yc-23">حساب کاربری</h1>
+        <div class="yc profile-info">
+            <div class="yc titles">
+                <span class="yc yc-14 yc-400 yc-limit">نام و نام خانوادگی: {{ user.first_name }} {{ user.last_name }}</span>
+                <a href="{% url 'ChangeName' %}" class="left yc-14 yc-medium">ویرایش</a>
+            </div>
+            <div class="yc titles">
+                <span class="yc yc-14 yc-400 yc-limit">ایمیل: {{ user.email }}</span>
+                {% if user.email == ""%}
+                        <a href="{% url 'ChangeEmail' %}" class="left yc-14 yc-medium">وارد کنید</a>
+                {% else %}
+                        <a href="{% url 'ChangeEmail' %}" class="left yc-14 yc-medium">ویرایش</a>
+                {% endif %}
+            </div>
+            <div class="yc titles">
+
+                  <p class="p-2 text-right" dir="rtl">شماره تلفن همراه : <span class="yc yc-14 yc-400 yc-limit" >{{ user.username }} 0098</span></p>
+            </div>
+            <div class="yc titles">
+                <a href="{% url 'ChangePassword' %}" class="left yc-14 yc-medium">تغییر رمز عبور</a>
+            </div>
+        </div>
+        <div class="yc profile-plans">
+             <div class="yc titles">
+                <p style="" class="text-right m-0">سانسور: <span class="text-danger">
+{#                   {% if profile.is_censor_on %}#}
+{#                        <span class="text-warning farsi" style="color:green;">فعال</span>#}
+{#                   {% else %}#}
+                        <span id="censor_status" class="not-active yc-16 yc-medium" {% if profile.is_censor_on %} style="color:green;">فعال {% else %} style="color:red;"> غیرفعال {% endif %}</span>
+{#                   {% endif %}#}
+                </p>
+{#                <form action="/profile/censor-status/" method="post">#}
+                <form action="" method="post">
+
+                    <button id="censor_btn" onclick="censorHandler('{{ user.Profile.api_token }}');" name="censor" type="button" value="{% if profile.is_censor_on %}0{% else %}1{% endif %}" class="btn-blue">
+{#                        <svg class="m-1" xmlns="http://www.w3.org/2000/svg" width="8.676" height="12.478" viewBox="0 0 8.676 12.478">#}
+{#                            <path id="lock-solid" d="M14.493,7.345V5.657a3.234,3.234,0,0,0-3.155-3.3,3.234,3.234,0,0,0-3.155,3.3V7.345H7v6.7a.789.789,0,0,0,.789.789h7.1a.789.789,0,0,0,.789-.789v-6.7ZM11.733,11.38v1.092h-.789V11.344a.947.947,0,1,1,.789.035ZM13.7,7.345H8.972V5.657a2.445,2.445,0,0,1,2.366-2.508A2.445,2.445,0,0,1,13.7,5.657Z" transform="translate(-7 -2.36)" fill="#fff"/>#}
+{#                        </svg>#}
+                        {% if profile.is_censor_on %}
+                        غیر فعال کردن
+                        {% else %}
+                        فعال کردن
+                        {% endif %}
+                    </button>
+                </form>
+            </div>
+            <div class="yc titles"></div>
+        </div>
+        <div class="yc profile-plans">
+            <div class="yc titles">
+                <p class="text-right m-0">وضعیت اشتراک جاری  : <span class="text-danger">
+                    {% if user_subscription_valid_days < 0 %}<span class="not-active yc-16 yc-medium" style="color:red;"> ندارد </span>
+                      {% elif user.SubscriptionPlan.is_vip == True %}
+                            <span class="text-warning farsi" style="color:green;">VIP</span>
+                      {% else %}
+                            <span class="text-warning farsi" style="color:green;">ساده</span>
+                      {% endif %}
+                </p>
+                <a href="{% url 'Subscription' %}" class="left yc-14 yc-medium">خرید اشتراک</a>
+            </div>
+            <div class="yc titles">
+                {% if user_subscription_valid_days < 0 %}
+                <span class="yc yc-14 yc-medium yc-limit time">در حال حاضر اشتراک فعالی ندارید !</span>
+                {% else %}
+                <span class="yc yc-14 yc-medium yc-limit time" style="color:green;">{{ user_subscription_valid_days }} روز اشتراک دارید</span>
+                {% endif %}
+            </div>
+        </div>
+        <a href="{% url 'OrderList' %}" class="transactions-btn yc yc-align">لیست سفارشات</a>
+    </div>
+</div>
+
+{% endblock %}

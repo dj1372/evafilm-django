@@ -1,0 +1,34 @@
+{% extends 'base(login).html' %}
+{% load static %}
+
+{% block title %}تایید شماره موبایل{% endblock %}
+
+{% block content %}
+<br>
+<br>
+<div class="yc user-panel-form">
+    <div class="panel-main">
+        <div class="head yc">
+            <a href="{% url 'Home' %}"><img src="{% static 'x-logo/logo.png' %}" title="ایوافیلم" alt="ایوافیلم" class="yc logo"></a>
+        </div>
+        <div class="form yc">
+            <h1 class="yc yc-fff yc-20 yc-bold">کد فعالسازی</h1>
+            <form class="yc"method="POST" id="v_form" action="">
+              {% csrf_token %}
+              <label for="txtNumber"></label>
+                <h3 class="yc yc-16 yc-400" style="color: #ffffff;">یک کد به شماره تلفن <span dir="ltr">0{{ mobile }}</span> پیامک شد. لطفا کد را وارد کنید</h3>
+                <input type="text" name="vcode"  class="input" id="txtPassword" placeholder=" کد فعالسازی ">
+                <input class="d-none" style="display:none;" value="{{ mobile }}"  class="input" type="text" name="mobile" id="mobile">
+                <input class="d-none" style="display:none;" value="{{ state }}"  class="input" type="text" name="state" id="state">
+                {% if alert is not None %}
+                    <div class="panel-alert">
+                        {{ alert }}
+                    </div>
+                {% endif %}
+                <button class="submit">ثبت</button>
+                <br />
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

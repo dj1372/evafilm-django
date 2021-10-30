@@ -1,0 +1,60 @@
+{% extends 'base(original).html' %}
+{% load static %}
+{% block keywords %}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
+{% block custom_css %}  <link rel="stylesheet" href="{% static 'css/custom.css' %}"> {% endblock %}
+
+
+{% block content %}
+    <br><br><br><br>
+    <div class="container-fluid py-4">
+    <h4 class="text-light">{{ title }}</h4>
+        <div class='list'>
+            <div class='list-con'>
+                {% for i in special_playlist %}
+                    <a href="{% url 'Home' %}{{ i.playlist.page_url }}"  class='list-element'>
+                        <div class="list-bg">
+                            <img src="{% url 'Home' %}media/{{ i.playlist.thumb_image }}" />
+                            <div>
+                                <p class="text-right movie-info">
+                                        {{ i.playlist.get_type_display }} - {{ i.playlist.country.first }} - {{ i.playlist.year }}</p>
+                                <p class="text-right movie-info">
+                                    <i class="fa fa-star{% if playlist.score < 5 %} star-bronze{% endif %}"></i> {{ i.playlist.score }}</p>
+                            </div>
+                        </div>
+                        <p class="movie-title">{{ i.playlist.name_fa|truncatechars:23 }}</p>
+                        <p class="movie-title ltr">{{ i.playlist.name_en|truncatechars:20 }}</p>
+                    </a>
+                {% endfor %}
+
+            </div>
+            <div class="list-pagination" dir="rtl">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        {% if special_playlist.paginator.page_range > 1 %}
+                            {% if special_playlist.has_previous %}
+                                <li class="page-item"><a class="page-link"
+                                                         href="?page={{ page_obj.previous_page_number }}">قبلی</a></li>
+                            {% endif %}
+
+                            {% for i in special_playlist.paginator.page_range  %}
+                                {% if i == special_playlist.number  %}
+                                    <li class="page-item disabled"><a class="page-link"
+                                                                      href="?page={{ i }}">{{ i }}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?page={{ i }}">{{ i }}</a></li>
+                                {% endif %}
+                            {%  endfor %}
+
+                            {% if special_playlist.has_next %}
+                                <li class="page-item"><a class="page-link"
+                                                         href="?page={{ special_playlist.next_page_number }}">بعدی</a></li>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}

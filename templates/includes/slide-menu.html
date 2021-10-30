@@ -1,0 +1,18 @@
+{% load static %}
+
+<slide-menu class="slide-menu">
+	<div class="menu-info main">
+		<span class="yc-pointer yc-fff yc-22 right" id="menu-close"><i class="fa fa-list"></i></span>
+		<div class="right logo">
+		    <a href="{% url 'Home' %}"><img src="{% static 'x-logo/logo.png' %}" title="ایوا فیلم" alt="ایوا فیلم"></a>
+	    </div>
+
+		<ul class="yc">
+			<li class="yc"><a href="{% url 'Home'%}" class="yc yc-fff yc-13 yc-400"><i class="fa fa-home"></i> <samp>خانه</samp></a></li>
+			<li class="yc"><a href="{% url 'Movies'%}" class="yc yc-fff yc-13 yc-400"><i class="fa fa-video-camera"></i> <samp>فیلم ها</samp></a></li>
+			<li class="yc"><a href="{% url 'Series'%}" class="yc yc-fff yc-13 yc-400"><i class="fa fa-tv"></i> <samp>سریال ها</samp></a></li>
+			<li class="yc"><a href="{% url 'Categories'%}" class="yc yc-fff yc-13 yc-400"><i class="fa fa-magic"></i> <samp>دسته بندی</samp></a></li>
+			<li class="yc"><a href="https://evafilm.stream/blog" class="yc yc-fff yc-13 yc-400"><i class="fa fa-magic"></i> <samp>بلاگ</samp></a></li>
+		</ul>
+	</div>
+</slide-menu>

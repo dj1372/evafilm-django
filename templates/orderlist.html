@@ -1,0 +1,35 @@
+{% extends 'base(subscription).html' %}
+{% block title %}لیست سفارشات{% endblock %}
+
+{% block content %}
+<div class="yc pages">
+    <div class="main-pages">
+        <h1 class="yc-400 yc-align yc yc-23">لیست سفارشات</h1>
+        <div class="yc transactions">
+            <div style="width: 100%;overflow-x: auto;">
+                <table class="table yc">
+                    <thead>
+                        <tr>
+                            <th scope="yc-14 yc-bold">شماره سفارش</th>
+                            <th scope="yc-14 yc-bold">زمان ثبت سفارش</th>
+                            <th scope="yc-14 yc-bold">اشتراک</th>
+                            <th scope="yc-14 yc-bold">وضعیت سفارش</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for order in orders %}
+                          <tr>
+<!--                              <td scope="col">ردیف</td>-->
+                              <td scope="yc-14 yc-bold">{{ order.order_id }}</td>
+                              <td scope="yc-14 yc-bold">{{ order.get_created_at }}</td>
+                              <td scope="yc-14 yc-bold">{{ order.subscription_plan.title }}</td>
+                              <td scope="yc-14 yc-bold">{{ order.get_status_display }}</td>
+                          </tr>
+                      {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

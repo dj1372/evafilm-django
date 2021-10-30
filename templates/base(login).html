@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+{% load static %}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+    {% block keywords %}{% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="{% static 'x-logo/fave-icon/apple-touch-icon-57x57.png' %}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{% static 'x-logo/fave-icon/apple-touch-icon-60x60.png' %}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{% static 'x-logo/fave-icon/apple-touch-icon-72x72.png' %}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'x-logo/fave-icon/apple-touch-icon-76x76.png' %}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'x-logo/fave-icon/apple-touch-icon-114x114.png' %}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{% static 'x-logo/fave-icon/apple-touch-icon-120x120.png' %}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{% static 'x-logo/fave-icon/apple-touch-icon-144x144.png' %}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{% static 'x-logo/fave-icon/apple-touch-icon-152x152.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'x-logo/fave-icon/apple-touch-icon-180x180.png' %}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'x-logo/fave-icon/icon-192x192.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'x-logo/fave-icon/icon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'x-logo/fave-icon/icon-96x96.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'x-logo/fave-icon/icon-16x16.png' %}">
+    <link rel="icon" type="image/png" sizes="512x512" href="{% static 'x-logo/fave-icon/icon-512x512.png' %}">
+    <meta name=robots content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <link rel='stylesheet' id='style-css'  href="{% static 'style-imported/css/themes-evafilm-style.css' %}" type='text/css' media='all' />
+    <link rel='stylesheet' id='fonts-css'  href="{% static 'style-imported/css/themes-evafilm-assets-css-fonts.css' %}" type='text/css' media='all' />
+    <script type='text/javascript' src="{% static 'style-imported/js/themes-evafilm-assets-js-jquery.js' %}?ver=1.0" id='jquery-js'></script>
+    {% block custom_css %}{% endblock %}
+</head>
+<body class="panel-body">
+    <div class="main">
+{% block content %}
+
+{% endblock %}
+</div>
+
+{% block footer %} {% include 'includes/footer.html' %} {% endblock %}
+
+<div class="blur-page"></div>
+
+</body>
+
+</html>

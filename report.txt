@@ -1,0 +1,46 @@
+file rede
+pay faild
+file rede
+pay faild
+file rede
+pay faild
+file rede
+pay faild
+file rede
+pay faild
+file rede
+pay faild
+file rede
+res is 0
+after verify
+payment_verify_state: True
+transaction.status: 1
+payment_settle_state: True
+is payed: 3
+new plan
+pay done
+file rede
+res is 0
+after verify
+payment_verify_state: True
+transaction.status: 1
+payment_settle_state: True
+is payed: 3
+code status active: 9012679848
+transaction.user: 9012679848
+request.user: AnonymousUser
+new plan
+file rede
+res is 0
+after verify
+payment_verify_state: True
+transaction.status: 1
+payment_settle_state: True
+is payed: 3
+file rede
+res is 0
+after verify
+payment_verify_state: True
+transaction.status: 1
+payment_settle_state: True
+is payed: 3

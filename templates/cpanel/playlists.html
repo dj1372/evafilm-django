@@ -1,0 +1,64 @@
+{% extends 'cpanel/base.html' %}
+
+{% block title %}Evafilm{% endblock %}
+
+{% block breadcrumbitm %}
+    <li class="breadcrumb-item active">لیست فیلم و سریال ها</li>
+{% endblock %}
+{% block content %}
+    <div class="container pt-4">
+    <div>
+        <h3 class="text-light float-right">لیست فیلم/سریال ها</h3>
+        <a class="btn btn-success float-left mb-2" href="{% url 'admin_new_playlist' %}">فیلم/سریال جدید</a>
+        <a class="btn btn-secondary float-left mb-2 ml-1" href="{% url 'admin_actors' %}">بازیگرها</a>
+        <a class="btn btn-secondary float-left mb-2 ml-1" href="{% url 'admin_directors' %}">کارگردان ها</a>
+        <a class="btn btn-secondary float-left mb-2 ml-1" href="{% url 'admin_categories' %}">ژانر ها</a>
+    </div>
+    <div class="table-responsive">
+    <table class="table" dir="rtl">
+        <thead class="thead-dark">
+            <tr class="text-light">
+                <th>آی دی</th>
+                <th>نام انگلیسی</th>
+                <th>نام فارسی</th>
+                <th>نوع</th>
+                <th>فصل ها</th>
+                <th>اپیزودها</th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody class="text-light">
+
+            {% for playlist in playlists %}
+            <tr>
+                <td class="align-middle">
+                    {{ playlist.id }}
+                </td>
+                <td class="align-middle">
+                    <a target="_blank" class="text-light" href="{% url 'Home' %}{{ playlist.page_url }}">{{ playlist.name_en|truncatechars:28 }}</a>
+                </td>
+                <td class="align-middle">
+                    {{ playlist.name_fa|truncatechars:28  }}
+                </td>
+                <td class="align-middle">
+                    {{ playlist.get_type_display }}
+                </td>
+                <td class="align-middle">
+                    {{ playlist.Seasons.count }}
+                </td>
+                <td class="align-middle">
+                    {{ playlist.Episodes.count }}
+                </td>
+                <td>
+                    <a class="btn btn-info text-light" href="{% url 'admin_seasons' playlist.id %}">فصل ها</a>
+                    <a class="btn btn-secondary text-light" href="{% url 'admin_edit_playlist' playlist.id %}">ویرایش</a>
+                    <a class="btn btn-danger text-light" href="{% url 'admin_delete_playlist' playlist.id %}">حذف</a>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    </div>
+{% endblock %}

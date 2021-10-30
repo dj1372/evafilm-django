@@ -1,0 +1,36 @@
+{% extends 'base(original).html' %}
+{% load static %}
+{% block title %}نتایج جستجو{% endblock %}
+{% block custom_css %}{% endblock %}
+
+{% block content %}
+<div class="yc movie-slides" style="margin-top: 100px;">
+  <div class="main yc-relative" style="margin-top: 10px;">
+      <h3 class="yc-22 yc-medium yc-fff section-info"> نتایج جستجو برای  {{query}}</h3>
+      <section class="yc owl-carousel movies-slider yc-sliders">
+           {% for item in results %}
+               <article class="right item" data-disabled="false" data-post="146">
+                  <a href="{% url 'Home' %}{{ item.page_url }}">
+                      <div class="yc yc-relative" rel="bookmark" title="{{item.name_fa}}">
+                          <img src="{% url 'Home' %}media/{{item.thumb_image}}" alt="{{item.name_fa}}" />
+                          <div class="hvr-post">
+                              <ul class="yc yc-absolute">
+                                  <li class="yc-fff yc-14 yc-400 yc yc-limit">فیلم - {{item.year}}</li>
+                                  <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> {{item.imdb_score}}</li>
+                                  <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa "></i> {{item.country}}</li>                                    <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-file-text-o"></i> زیرنویس فارسی</li>                                </ul>
+                          </div>
+                          <h4 class="yc-fff yc yc-15 yc-medium yc-limit">{{item.name_fa}}</h4>
+                      </div>
+                  </a>
+              </article>
+          {% endfor %}
+      </section>
+  </div>
+
+  <div class="postinfo yc">
+      <div class="loader-pic right yc-center">
+          <img src="{% static 'images/loader.svg' %}" />
+      </div>
+  </div>
+</div>
+{% endblock %}

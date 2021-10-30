@@ -1,0 +1,518 @@
+{% extends 'base(original).html' %}
+{% load static %}
+
+{% block custom_css %}{% endblock %}
+
+{% csrf_token %}
+
+{% block keywords %}
+    <meta property="og:title" content="تماشای آنلاین فیلم و سریال" />
+    <meta property="og:image" content="https://evafilm.stream/static/images/evafilm.png">
+    <meta property="og:url"   content="https://evafilm.stream" />
+    <meta property="og:url"   content="https://evafilm.ir" />
+    <meta name="description" content="ایوافیلم - سرویس تماشای آنلاین فیلم و سریال های خارجی" />
+    <meta name="keywords" content="پخش فیلم,پخش آنلاین فیلم,آنلاین,فیلم,دانلود فیلم,ویدیو,ویدئو,بهمهئخ,movie,film,season,
+    video,download movie,download,download film,online,evafilm,تماشای آنلاین,Evafilm,فیلم خارجی 2021,فیلم سینمایی خارجی جدید,فیلم هندی,
+    فیلم های جدید خارجی,فیلم های کمدی,جدیدترین فیلم های خارجی,فیلم های جدید,بهترین فیلم خارجی,فیلم جدید,
+    ایوافیلم,سریال خارجی جدید,فیلم های اکشن,سایت فیلم های خارجی ,جدیدترین فیلم های هالیوود" />
+    <meta name="google-site-verification" content="v2nasLiTg2PbNoFS0sKMIIrYViTg1OPtotg8NnkSsN0" />
+{% endblock %}
+
+{% block title %}ایوافیلم - سرویس تماشای آنلاین فیلم و سریال{% endblock %}
+
+{% block content %}
+
+<div class="yc main-header"  id="homehead">
+    <div class="yc owl-carousel main-slider" style="margin-left: -2px;">
+        {% for item in slider_items %}
+            <div class="item yc yc-overflow yc-relative">
+            {% if item.playlist.image_1920x1080 %}
+                <div class="d-slide-bg" style="background-image: linear-gradient(rgba(18, 18, 18, 0) 10vw, rgb(18, 18, 18) 46.875vw), linear-gradient(to left, rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0) 50%), url({{item.playlist.image_1920x1080.url}});">
+              {% else %}
+                <div class="d-slide-bg" style="background-image: linear-gradient(rgba(18, 18, 18, 0) 10vw, rgb(18, 18, 18) 46.875vw), linear-gradient(to left, rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0) 50%)">
+               {% endif %}
+                    <div class="slide-info right">
+                        <div class="info-center">
+                            <a href="{{ item.playlist.page_url }}" class="yc">
+                                <img src="{{item.playlist.thumb_image.url}}" alt="{{ item.playlist.name_en }}" href="{{ item.playlist.page_url }}" target="_blank"  />
+                                <h2 style="padding-right: 45px" class="yc-fff yc-medium yc-25">{{ item.playlist.name_fa }}</h2>
+                                <div style="padding-right: 45px" id="post_summery_inner_style" class="post-content yc yc-16 yc-fff">
+                                    <p>{{ item.playlist.summary }}</p>
+                                </div>
+                                <br id="post_summery_inner_style_vertical_space">
+                            </a>
+                            {% if item.playlist.type == 2 %}
+                                <a style="margin-right: 45px" href="{{ item.playlist.page_url }}" target="_blank" class="right slide-btns demo">مشخصات سریال</a>
+                            {% else %}
+                                <a style="margin-right: 45px" href="{{ item.playlist.page_url }}" target="_blank" class="right slide-btns demo">مشخصات فیلم</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="yc">
+    <div class="main nots-slid">
+          <ul class="owl-carousel nots-slider yc-sliders">
+                          <li class="right item yc-overflow">
+                  <a href="#" class="right">
+                      <img src="{% static 'x-ad/ad-1.jpg' %}" alt="ایوافیلم">
+                  </a>
+              </li>
+                          <li class="right item yc-overflow">
+                  <a href="#" class="right">
+                      <img src="{% static 'x-ad/ad-2.jpg' %}" alt="ایوافیلم">
+                  </a>
+              </li>
+                          <li class="right item yc-overflow">
+                  <a href="#" class="right">
+                      <img src="{% static 'x-ad/ad-3.jpg' %}" alt="ایوافیلم">
+                  </a>
+              </li>
+                          <li class="right item yc-overflow">
+                  <a href="#" class="right">
+                      <img src="{% static 'x-ad/ad-4.jpg' %}" alt="ایوافیلم">
+                  </a>
+              </li>
+          </ul>
+    </div>
+</div>
+
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">پخش رایگان</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="free">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">تازه های ایوافیلم</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="new">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">فیلم های 2021</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="2021">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">سریال های بروز شده</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="series">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">اکشن</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="action">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">هیجان انگیز</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="thriller">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">درام</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="drama">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">عاشقانه</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="romance">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<!--<div class="yc actors-slide">-->
+<!--    <div class="main yc-relative">-->
+<!--        <h3 class="yc-22 yc-medium yc-fff">ستارگان</h3>-->
+<!--        <ul class="yc owl-carousel actors-slider yc-sliders">-->
+<!--        {% for actor in actors %}-->
+<!--            <li class="item right">-->
+<!--                <a href="{% url 'ViewActor' actor.id actor.name %}" title="{{actor.name}}">-->
+<!--                    <img src="{% url 'Home' %}media/{{actor.thumb_image}}" alt="{{actor.name}}">-->
+<!--                    <samp class="yc-fff yc-15 yc-400 yc yc-limit yc-align">{{actor.name}}</samp>-->
+<!--                </a>-->
+<!--            </li>-->
+<!--        {% endfor %}-->
+<!--        </ul>-->
+<!--        <div class="right yc-center load-more">-->
+<!--            <a href="{% url 'actor_page' %}">-->
+<!--            <span class="more-actors yc-fff" data-disabled="false" data-page="1">مشاهده بیشتر</span>-->
+<!--            </a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="yc movie-slides hidden">-->
+<!--    <div class="main yc-relative">-->
+<!--        <h3 class="yc-22 yc-medium yc-fff section-info">ستارگان</h3>-->
+<!--        <section class="yc owl-carousel actors-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="actor">-->
+<!--            <div class="owl-stage-outer">-->
+<!--                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">-->
+<!--                    <img src="{% url 'Home' %}media/{{actor.thumb_image}}" alt="{{actor.name}}" />-->
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </section>-->
+<!--    </div>-->
+<!--</div>-->
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">انیمیشن</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="animation">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">ترسناک</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="horror">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">علمی تخیلی</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="sci_fi">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">ماجراجویی</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="adventure">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">فانتزی</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="fantasy">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">جنگی</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="war">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">کمدی</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="comedy">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">جنایی</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="crime">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">زندگی نامه</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="biography">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">مستند</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="documentry">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">خانوادگی</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="family">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">تاریخی</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="history">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">معمایی</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="mystery">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="yc movie-slides hidden">
+    <div class="main yc-relative">
+        <h3 class="yc-22 yc-medium yc-fff section-info">وسترن</h3>
+        <section class="yc owl-carousel movies-slider yc-sliders owl-rtl owl-loaded owl-drag" data-slider_type="western">
+            <div class="owl-stage-outer">
+                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2650px;">
+                    <img src="{% url 'Home' %}media/{{ playlist.thumb_image }}" alt="{{ playlist.name_fa }}" />
+<!--                    <div class="hvr-post">-->
+<!--                        <ul class="yc yc-absolute">-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit">{{ playlist.country.first }} - {{ playlist.year }}</li>-->
+<!--                            <li class="yc-fff yc-14 yc-400 yc yc-limit"><i class="fa fa-heart"></i> &nbsp;{{ playlist.imdb_score }}</li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
